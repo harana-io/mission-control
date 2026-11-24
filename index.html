@@ -629,7 +629,7 @@ footer .sig{font-family:var(--f-script);font-size:clamp(34px,7vw,58px);color:var
     </div>
     <div class="radio-foot">
       <a class="btn solid" id="plBtn" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18"><circle cx="12" cy="12" r="11" fill="currentColor" opacity=".18"/><path d="M6.5 9.2c3.8-1.2 7.9-.8 11 1M7.2 12.4c3.2-.9 6.4-.6 9.1.9M7.9 15.3c2.6-.6 5-.4 7.2.7" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>Open in Spotify</a>
-      <span class="radio-note" id="rNote">Opens the playlist in your Spotify app. To add songs, accept the collaborator invite in the group chat first.</span>
+      <span class="radio-note" id="rNote">Opens the playlist in your Spotify app with add access. Search a song, tap the three dots, then Add to playlist.</span>
     </div>
   </div>
   <div class="panel pack">
@@ -669,14 +669,14 @@ footer .sig{font-family:var(--f-script);font-size:clamp(34px,7vw,58px);color:var
 const LAUNCH = new Date('2027-01-09T17:00:00-06:00');
 const PLAYLIST_URL = 'https://open.spotify.com/playlist/1CV8o9cbQmChH1QqO6IJMl';
 /* Spotify collaborator invite link (playlist menu > Invite collaborators). When set, the button opens the playlist AND gives add rights. Invite links expire after 7 days. */
-const PLAYLIST_INVITE = '';
+const PLAYLIST_INVITE = 'https://open.spotify.com/playlist/1CV8o9cbQmChH1QqO6IJMl?si=080b7786eac54216&pt=4e884173d38c93af2ed19eb1b4c246c3';
 const CREW = [
   {id:'earl', name:'Earl', station:'CDR', role:'Commander · Groom', duty:'Planned Bohol to the hour and went on his first hunt in Jordans. On January 9 someone else holds the clipboard.'},
-  {id:'alec', name:'Alec', station:'FLIGHT', role:'Flight Director · Officiant', duty:'Runs the ceremony. Flew this exact mission in May with the same crew, so he already knows the checklist.'},
-  {id:'tristian', name:'Tristian', station:'CAPCOM', role:'Capsule Communicator', duty:'Voice of the crew. Sends the 30 minute warning before every session and has landed a real simulator.'},
-  {id:'jared', name:'Jared', station:'EECOM', role:'Electrical · Environmental', duty:'Wired half of the commander’s house at journeyman rate. Keeps the lights on and the cooler tube stocked.'},
-  {id:'jacob', name:'Jacob', station:'BOOSTER', role:'Booster Systems', duty:'Engaged and next on the launch schedule. Last to log on, first to arrive with the drinks. Always worth it.'},
-  {id:'adrian', name:'Adrian', station:'RETRO', role:'Retrofire · Baltimore station', duty:'Remote operator donkeydhong. Knows which truck will outlive you, bakes a mean cheesecake and suits up in Texas.'}
+  {id:'alec', name:'Alec', station:'FLIGHT', role:'Flight Director · Officiant', duty:'Runs the ceremony. Engineers life-saving medicine by day and flew this exact mission in May with this crew.'},
+  {id:'tristian', name:'Tristian', station:'CAPCOM', role:'Capsule Communicator', duty:'Voice of the crew and a licensed A&P tech. If it has wings, it gets his sign-off before anyone leaves the ground.'},
+  {id:'jared', name:'Jared', station:'EECOM', role:'Electrical · Access Control', duty:'Controls and access tech. Wired half of the commander’s house at journeyman rate and holds every door code.'},
+  {id:'jacob', name:'Jacob', station:'BOOSTER', role:'Booster Systems', duty:'Wealth manager who treats the open bar like a portfolio. Engaged, and next on the launch schedule after this one.'},
+  {id:'adrian', name:'Adrian', station:'RETRO', role:'Retrofire · Baltimore station', duty:'Remote operator donkeydhong. Runs a body shop, knows which truck will outlive you, and suits up in Texas.'}
 ];
 const MW = 'Men’s Wearhouse, 19222 Gulf Fwy, Friendswood, TX 77546', HOUSE = '11820 Stewart Rd, Galveston, TX 77554', VENUE = 'Bayside Event Center, 1723 61st St, Galveston, TX 77551';
 const PLAN = [
@@ -780,14 +780,14 @@ $('#plBtn').href = PLAYLIST_INVITE || PLAYLIST_URL;
   const slot = $('#spSlot'), radio = $('#radio'), id = (PLAYLIST_URL.match(/playlist\/([A-Za-z0-9]+)/) || [])[1];
   let blocked = false, tuned = false;
   const tune = (f, st, t) => { $('#rFreq').textContent = f; $('#rSt').textContent = st; radio.style.setProperty('--tune', t); $('#rKnobA').style.setProperty('--rot', (t * 300 - 150) + 'deg'); $('#rKnobB').style.setProperty('--rot', (t * -220 + 40) + 'deg'); };
-  document.addEventListener('securitypolicyviolation', e => { if (/spotify/.test(e.blockedURI || '') && !blocked){ blocked = true; const f = slot.querySelector('iframe'); if (f) f.remove(); slot.dataset.state = 'offair'; tune('101.9', 'TAPE', .69); $('#rNote').textContent = 'Opens the playlist in your Spotify app. To add songs, accept the collaborator invite in the group chat first.'; } });
+  document.addEventListener('securitypolicyviolation', e => { if (/spotify/.test(e.blockedURI || '') && !blocked){ blocked = true; const f = slot.querySelector('iframe'); if (f) f.remove(); slot.dataset.state = 'offair'; tune('101.9', 'TAPE', .69); $('#rNote').textContent = 'Opens the playlist in your Spotify app with add access. Search a song, tap the three dots, then Add to playlist.'; } });
   function goLive(){
     if (tuned || !id || navigator.onLine === false) return; tuned = true; tune('88.0', 'SEEK', .02);
     const f = document.createElement('iframe');
     f.title = 'Mission Control crew playlist on Spotify';
     f.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
     f.src = 'https://open.spotify.com/embed/playlist/' + id + '?utm_source=generator&theme=0';
-    f.addEventListener('load', () => setTimeout(() => { if (blocked) return; slot.dataset.state = 'live'; tune('101.9', 'LIVE', .69); $('#rNote').textContent = 'Previews play here. Full songs and adding tracks happen in your Spotify app. Accept the collaborator invite in the group chat to add.'; }, 250));
+    f.addEventListener('load', () => setTimeout(() => { if (blocked) return; slot.dataset.state = 'live'; tune('101.9', 'LIVE', .69); $('#rNote').textContent = 'Previews play here. For full songs and to add your own, tap Open in Spotify: it opens the playlist with add access.'; }, 250));
     $('#spTray').appendChild(f);
     setTimeout(() => { if (!blocked && slot.dataset.state !== 'live') tune('101.9', 'TAPE', .69); }, 1800);
   }
