@@ -198,7 +198,11 @@ html.anat-live .anat-list li.on{opacity:1;border-color:var(--teal);transform:tra
 .card .station{font-family:var(--f-mono);font-size:12px;letter-spacing:.2em;color:var(--teal)}
 .card .name{font-family:var(--f-display);font-weight:800;font-style:italic;text-transform:uppercase;font-size:38px;line-height:1;margin:6px 0 2px}
 .card .role{color:var(--gold);font-weight:600}
-.card p{margin:10px 0 14px;color:var(--ink-2);font-size:15px;flex:1}
+.card p{margin:10px 0 12px;color:var(--ink-2);font-size:15px;flex:1}
+.card small{display:block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);margin-bottom:3px}
+.card .tx{border-left:2px solid var(--pink);padding:2px 0 2px 12px;margin-bottom:12px;min-height:calc(1.45em * 2 + 20px);box-shadow:-6px 0 14px -8px var(--pink)}
+.card .tx q{display:block;font-style:italic;font-size:14.5px;line-height:1.45;color:var(--ink);quotes:'“' '”'}
+.card .known{margin-bottom:14px}.card .known span{font-family:var(--f-mono);font-size:12.5px;color:var(--teal);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
 .card .gobtn{margin-top:auto}
 .gobtn{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border-radius:12px;border:1px solid var(--line-2);font-family:var(--f-display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:15px}
 .gobtn .led{width:12px;height:12px;border-radius:50%;background:var(--hold);box-shadow:0 0 10px var(--hold)}
@@ -671,12 +675,12 @@ const PLAYLIST_URL = 'https://open.spotify.com/playlist/1CV8o9cbQmChH1QqO6IJMl';
 /* Spotify collaborator invite link (playlist menu > Invite collaborators). When set, the button opens the playlist AND gives add rights. Invite links expire after 7 days. */
 const PLAYLIST_INVITE = 'https://open.spotify.com/playlist/1CV8o9cbQmChH1QqO6IJMl?si=080b7786eac54216&pt=4e884173d38c93af2ed19eb1b4c246c3';
 const CREW = [
-  {id:'earl', name:'Earl', station:'CDR', role:'Commander · Groom', duty:'Planned Bohol to the hour and went on his first hunt in Jordans. On January 9 someone else holds the clipboard.'},
-  {id:'alec', name:'Alec', station:'FLIGHT', role:'Flight Director · Officiant', duty:'Runs the ceremony. Engineers life-saving medicine by day and flew this exact mission in May with this crew.'},
-  {id:'tristian', name:'Tristian', station:'CAPCOM', role:'Capsule Communicator', duty:'Voice of the crew and a licensed A&P tech. If it has wings, it gets his sign-off before anyone leaves the ground.'},
-  {id:'jared', name:'Jared', station:'EECOM', role:'Electrical · Access Control', duty:'Controls and access tech. Wired half of the commander’s house at journeyman rate and holds every door code.'},
-  {id:'jacob', name:'Jacob', station:'BOOSTER', role:'Booster Systems', duty:'Wealth manager who treats the open bar like a portfolio. Engaged, and next on the launch schedule after this one.'},
-  {id:'adrian', name:'Adrian', station:'RETRO', role:'Retrofire · Baltimore station', duty:'Remote operator donkeydhong. Runs a body shop, knows which truck will outlive you, and suits up in Texas.'}
+  {id:'earl', said:'Time to search and destroy tonight or you’re off the squad.', known:'Disc golf · D&D · itineraries', name:'Earl', station:'CDR', role:'Commander · Groom', duty:'Planned Bohol to the hour and went on his first hunt in Jordans. On January 9 someone else holds the clipboard.'},
+  {id:'alec', said:'Hey goofballs, I need yall to get fitted.', known:'Rockets · Texans · fajitas', name:'Alec', station:'FLIGHT', role:'Flight Director · Officiant', duty:'Runs the ceremony. Engineers life-saving medicine by day and flew this exact mission in May with this crew.'},
+  {id:'tristian', said:'30 min reminder people!!!', known:'MW2 · fantasy football · mixers', name:'Tristian', station:'CAPCOM', role:'Capsule Communicator', duty:'Voice of the crew and a licensed A&P tech. If it has wings, it gets his sign-off before anyone leaves the ground.'},
+  {id:'jared', said:'We discing today boys?', known:'Disc golf · karaoke · river tubes', name:'Jared', station:'EECOM', role:'Electrical · Access Control', duty:'Controls and access tech. Wired half of the commander’s house at journeyman rate and holds every door code.'},
+  {id:'jacob', said:'I literally just walked in the door.', known:'Rockets · hosting · the cooler', name:'Jacob', station:'BOOSTER', role:'Booster Systems', duty:'Wealth manager who treats the open bar like a portfolio. Engaged, and next on the launch schedule after this one.'},
+  {id:'adrian', said:'I’ll get fitted soon.', known:'Cheesecake · cats · the grill', name:'Adrian', station:'RETRO', role:'Retrofire · Baltimore station', duty:'Remote operator donkeydhong. Runs a body shop, knows which truck will outlive you, and suits up in Texas.'}
 ];
 const MW = 'Men’s Wearhouse, 19222 Gulf Fwy, Friendswood, TX 77546', HOUSE = '11820 Stewart Rd, Galveston, TX 77554', VENUE = 'Bayside Event Center, 1723 61st St, Galveston, TX 77551';
 const PLAN = [
@@ -741,7 +745,7 @@ $('#heroCal').innerHTML = calHTML(PLAN.find(m => m.launch).cal, 'calrow hero-cal
 
 /* ---------- crew and the go / no-go poll ---------- */
 const go = store.get('go', {});
-function renderCrew(){ $('#crewGrid').innerHTML = CREW.map(c => `<article class="card ${go[c.id] ? 'is-go' : ''}" data-id="${c.id}"><div class="station">${esc(c.station)}</div><div class="name">${esc(c.name)}</div><div class="role">${esc(c.role)}</div><p>${esc(c.duty)}</p>
+function renderCrew(){ $('#crewGrid').innerHTML = CREW.map(c => `<article class="card ${go[c.id] ? 'is-go' : ''}" data-id="${c.id}"><div class="station">${esc(c.station)}</div><div class="name">${esc(c.name)}</div><div class="role">${esc(c.role)}</div><p>${esc(c.duty)}</p><div class="tx"><small>Last transmission</small><q>${esc(c.said)}</q></div><div class="known"><small>Known for</small><span>${esc(c.known)}</span></div>
   <button class="gobtn" aria-pressed="${!!go[c.id]}" data-go="${c.id}"><span class="led"></span><span>${go[c.id] ? esc(c.station) + ' is go' : 'Report go'}</span></button></article>`).join('');
   const n = CREW.filter(c => go[c.id]).length; $('#goN').textContent = n; $('.poll .bar').style.setProperty('--n', n); $('#allgo').hidden = n !== CREW.length; tilt($$('.card')); }
 $('#crewGrid').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (!b) return; const id = b.dataset.go; go[id] = !go[id]; store.set('go', go); renderCrew(); go[id] ? chirp() : blip();
