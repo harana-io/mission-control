@@ -605,7 +605,7 @@ footer .sig{font-family:var(--f-script);font-size:clamp(34px,7vw,58px);color:var
     </div>
     <div class="radio-foot">
       <a class="btn solid" id="plBtn" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18"><circle cx="12" cy="12" r="11" fill="currentColor" opacity=".18"/><path d="M6.5 9.2c3.8-1.2 7.9-.8 11 1M7.2 12.4c3.2-.9 6.4-.6 9.1.9M7.9 15.3c2.6-.6 5-.4 7.2.7" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>Open in Spotify</a>
-      <span class="radio-note" id="rNote">Tap to open the playlist in Spotify. Add your songs there.</span>
+      <span class="radio-note" id="rNote">Opens the playlist in your Spotify app. To add songs, accept the collaborator invite in the group chat first.</span>
     </div>
   </div>
   <div class="panel pack">
@@ -644,6 +644,8 @@ footer .sig{font-family:var(--f-script);font-size:clamp(34px,7vw,58px);color:var
 /* ---------- mission data: edit here ---------- */
 const LAUNCH = new Date('2027-01-09T17:00:00-06:00');
 const PLAYLIST_URL = 'https://open.spotify.com/playlist/1CV8o9cbQmChH1QqO6IJMl';
+/* Spotify collaborator invite link (playlist menu > Invite collaborators). When set, the button opens the playlist AND gives add rights. Invite links expire after 7 days. */
+const PLAYLIST_INVITE = '';
 const CREW = [
   {id:'earl', name:'Earl', station:'CDR', role:'Commander · Groom', duty:'Planned Bohol to the hour and went on his first hunt in Jordans. On January 9 someone else holds the clipboard.'},
   {id:'alec', name:'Alec', station:'FLIGHT', role:'Flight Director · Officiant', duty:'Runs the ceremony. Flew this exact mission in May with the same crew, so he already knows the checklist.'},
@@ -748,20 +750,20 @@ $('#drawBtn').addEventListener('click', () => { const names = CREW.map(c => c.na
 $('#eq').innerHTML = Array.from({length: 22}, (_, i) => `<i style="--i:${i};--h:${20 + Math.round(Math.abs(Math.sin(i * 1.7)) * 60)}"></i>`).join('');
 if (matchMedia('(hover: none)').matches && found.size < 6) $('#secHint').textContent = 'Try the patch. Hold the countdown. Keep tapping the signature.';
 $('.shore').addEventListener('click', () => toast('Not the Bullet, but close. Flight maintains Kemah has the best roller coaster in America.'));
-$('#plBtn').href = PLAYLIST_URL;
+$('#plBtn').href = PLAYLIST_INVITE || PLAYLIST_URL;
 /* Crew Radio: try the real Spotify player; if this host blocks frames (the claude.ai link does), stay a tape deck that opens Spotify */
 (function crewRadio(){
   const slot = $('#spSlot'), radio = $('#radio'), id = (PLAYLIST_URL.match(/playlist\/([A-Za-z0-9]+)/) || [])[1];
   let blocked = false, tuned = false;
   const tune = (f, st, t) => { $('#rFreq').textContent = f; $('#rSt').textContent = st; radio.style.setProperty('--tune', t); $('#rKnobA').style.setProperty('--rot', (t * 300 - 150) + 'deg'); $('#rKnobB').style.setProperty('--rot', (t * -220 + 40) + 'deg'); };
-  document.addEventListener('securitypolicyviolation', e => { if (/spotify/.test(e.blockedURI || '') && !blocked){ blocked = true; const f = slot.querySelector('iframe'); if (f) f.remove(); slot.dataset.state = 'offair'; tune('101.9', 'TAPE', .69); $('#rNote').textContent = 'Press play in Spotify. Add your songs there, the crew hears them here.'; } });
+  document.addEventListener('securitypolicyviolation', e => { if (/spotify/.test(e.blockedURI || '') && !blocked){ blocked = true; const f = slot.querySelector('iframe'); if (f) f.remove(); slot.dataset.state = 'offair'; tune('101.9', 'TAPE', .69); $('#rNote').textContent = 'Opens the playlist in your Spotify app. To add songs, accept the collaborator invite in the group chat first.'; } });
   function goLive(){
     if (tuned || !id || navigator.onLine === false) return; tuned = true; tune('88.0', 'SEEK', .02);
     const f = document.createElement('iframe');
     f.title = 'Mission Control crew playlist on Spotify';
     f.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
     f.src = 'https://open.spotify.com/embed/playlist/' + id + '?utm_source=generator&theme=0';
-    f.addEventListener('load', () => setTimeout(() => { if (blocked) return; slot.dataset.state = 'live'; tune('101.9', 'LIVE', .69); $('#rNote').textContent = 'Live on the uplink. Press play below, or open it in Spotify to add songs.'; }, 250));
+    f.addEventListener('load', () => setTimeout(() => { if (blocked) return; slot.dataset.state = 'live'; tune('101.9', 'LIVE', .69); $('#rNote').textContent = 'Previews play here. Full songs and adding tracks happen in your Spotify app. Accept the collaborator invite in the group chat to add.'; }, 250));
     $('#spTray').appendChild(f);
     setTimeout(() => { if (!blocked && slot.dataset.state !== 'live') tune('101.9', 'TAPE', .69); }, 1800);
   }
