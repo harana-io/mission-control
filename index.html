@@ -811,6 +811,7 @@ function tilt(els){ if (reduce || !matchMedia('(hover: hover)').matches) return;
   el.addEventListener('pointerenter', () => { r = el.getBoundingClientRect(); });
   el.addEventListener('pointermove', e => { if (!r) r = el.getBoundingClientRect(); ev = e; if (!q){ q = true; requestAnimationFrame(paint); } });
   el.addEventListener('pointerleave', () => { r = null; ev = null; el.style.setProperty('--rx', '0deg'); el.style.setProperty('--ry', '0deg'); }); }); }
+renderCrew(); tilt([$('#patch')]);
 
 /* ---------- starfield: parallax on scroll, a comet behind the cursor, warp on demand ---------- */
 const cv = $('#stars'), cx = cv.getContext('2d'); let W = 0, H = 0, stars = [], warp = 0, mouse = null, trail = [], scrollY0 = 0;
