@@ -249,7 +249,50 @@ html.anat-live .anat-list li.on{opacity:1;border-color:var(--teal);transform:tra
 .calrow.hero-cal .calbtn{font-size:13px;min-height:44px;padding:8px 18px}
 .calrow.mini .calbtn,.ms .calbtn{min-height:36px;padding:4px 12px;font-size:11px}
 #calMenu{position:fixed;z-index:95;min-width:220px;padding:6px;border-radius:14px;background:color-mix(in srgb,var(--panel-solid) 96%,transparent);border:1px solid var(--line-2);box-shadow:0 18px 40px #0009;display:grid;gap:2px;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
-#calMenu[hidden]{display:none}
+#calMenu[hidden],#navMenu[hidden]{display:none}
+/* section index */
+#navMenu{position:fixed;z-index:96;right:var(--gutr);width:min(340px,calc(100vw - 32px));max-height:calc(100dvh - 120px);overflow:auto;padding:8px;border-radius:16px;background:color-mix(in srgb,var(--panel-solid) 97%,transparent);border:1px solid var(--line-2);box-shadow:0 22px 50px #000a;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+#navMenu a{display:grid;grid-template-columns:34px minmax(0,1fr);align-items:baseline;gap:4px 8px;padding:11px 12px;border-radius:10px;color:var(--ink);text-decoration:none}
+#navMenu a small{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;color:var(--teal)}
+#navMenu a b{font-family:var(--f-display);font-weight:800;text-transform:uppercase;letter-spacing:.06em;font-size:18px;line-height:1.1}
+#navMenu a span{grid-column:2;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+#navMenu a[aria-current="true"]{background:color-mix(in srgb,var(--pink) 18%,transparent)}
+#navMenu a[aria-current="true"] b{color:var(--pink)}
+#navMenu a:hover,#navMenu a:focus-visible{background:var(--teal);color:var(--on-accent);outline:none}
+#navMenu a:hover small,#navMenu a:hover span,#navMenu a:focus-visible small,#navMenu a:focus-visible span,#navMenu a:hover b,#navMenu a:focus-visible b{color:var(--on-accent)}
+#navBtn[aria-expanded="true"]{background:var(--teal);border-color:var(--teal);color:var(--on-accent)}
+@media (max-width:760px){.hud-in .wordmark{order:0}.hud-in .clock{order:1}#navBtn{order:2;margin-left:auto}.hud-in .sw{order:3}#snd{order:4}#mus{order:5}}
+/* fold-down sections */
+:root{interpolate-size:allow-keywords}
+.fold{border-top:1px solid var(--line);margin-top:14px}
+.fold>summary{list-style:none;display:flex;align-items:center;gap:12px;cursor:pointer;padding:12px 2px;min-height:48px;font-family:var(--f-mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);-webkit-user-select:none;user-select:none}
+.fold>summary::-webkit-details-marker{display:none}
+.fold>summary .fc{margin-left:auto;color:var(--ink-3);font-family:var(--f-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+.fold>summary .fc.all{color:var(--go)}
+.fold>summary::after{content:"";flex:none;width:9px;height:9px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-3px) rotate(45deg);transition:transform .25s}
+.fold[open]>summary::after{transform:translateY(2px) rotate(225deg)}
+.fold>summary:hover{color:var(--ink)}
+.fold>summary:focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:8px}
+.fold::details-content{block-size:0;overflow:hidden;transition:block-size .35s ease,content-visibility .35s allow-discrete}
+.fold[open]::details-content{block-size:auto}
+.fold.solo{border:0;margin:0}
+.fold.solo>summary{padding:0;min-height:44px;font-family:var(--f-display);font-weight:800;font-size:24px;letter-spacing:.06em;line-height:1.1;color:var(--gold);text-shadow:0 0 12px color-mix(in srgb,var(--teal) 40%,transparent)}
+.fold.solo>summary .fc{color:var(--teal);text-shadow:none}
+.fold.solo>summary::after{color:var(--teal)}
+.fold.solo .fold-body{padding-top:12px}
+:root[data-sky="daybreak"] .fold.solo>summary{text-shadow:none}
+/* crew: a swipeable row on phones */
+.crew-dots,.swipe-hint{display:none}
+@media (max-width:619px){
+  .crew{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:calc(-1 * var(--gut)) calc(-1 * var(--gutr));padding:4px var(--gutr) 12px var(--gut);scroll-padding-inline:var(--gut);scrollbar-width:none;overscroll-behavior-x:contain}
+  .crew::-webkit-scrollbar{display:none}
+  .crew>.card{flex:0 0 86%;scroll-snap-align:start}
+  .crew-dots{display:flex;justify-content:center;gap:2px;margin:2px 0 6px}
+  .crew-dots button{width:30px;height:30px;display:grid;place-items:center;padding:0}
+  .crew-dots button::before{content:"";width:8px;height:8px;border-radius:4px;background:var(--line-2);transition:width .25s,background .25s}
+  .crew-dots button[aria-current="true"]::before{width:22px;background:var(--pink)}
+  .swipe-hint{display:block;margin:-8px 0 12px;font-family:var(--f-mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+}
 #calMenu a{display:block;padding:12px 14px;border-radius:10px;font-family:var(--f-mono);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);text-decoration:none}
 #calMenu a:hover,#calMenu a:focus-visible{background:var(--teal);color:var(--on-accent);outline:none}
 .calrow.mini{margin-top:8px;font-size:11px;gap:6px}
@@ -493,6 +536,9 @@ html:has(#splash:not([hidden])){overflow:hidden}
     <button class="iconbtn" id="snd" aria-pressed="false" aria-label="Sound" title="Sound">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
     </button>
+    <button class="iconbtn" id="navBtn" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="navMenu" aria-label="Jump to a section" title="Jump to a section">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+    </button>
     <button class="iconbtn" id="mus" hidden data-st="off" aria-pressed="false" aria-label="Play the crew radio" title="Play the crew radio">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
       <span class="eqm" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
@@ -558,7 +604,9 @@ html:has(#splash:not([hidden])){overflow:hidden}
 <section class="deck" id="crew"><div class="wrap">
   <div class="deck-head"><div><div class="tag">01 · Manifest</div><h2>The crew <em>six seats</em></h2></div></div>
   <p class="deck-sub" style="margin-bottom:20px">Six seats. Six stations. One commander who swears he is calm. Flip <em>your</em> switch to GO once your tux is handled and your calendar is clear. Your board is saved on this device.</p>
+  <p class="swipe-hint">Swipe through the crew &rarr;</p>
   <div class="crew" id="crewGrid"></div>
+  <div class="crew-dots" id="crewDots" aria-label="Crew cards"></div>
   <div class="poll"><span>YOUR GO / NO-GO BOARD</span><div class="bar"><i></i></div><span><b id="goN">0</b> of 6 stations go</span></div>
   <div class="allgo" id="allgo" hidden>All stations go for launch.</div>
 </div></section>
@@ -578,10 +626,12 @@ html:has(#splash:not([hidden])){overflow:hidden}
       <dl class="kv">
         <dt>Group</dt><dd><span class="mono">13804117</span><button class="copy" data-copy="13804117">Copy</button><span class="note">Give this number at any Men’s Wearhouse and they pull up the wedding.</span></dd>
         <dt>Cost</dt><dd>About <b>$205.66</b> each with tax ($177.99 rental + $12 damage and handling). Each of us covers our own.</dd>
+      </dl>
+      <details class="fold"><summary><span>Store, Adrian, fine print</span></summary><div class="fold-body"><dl class="kv">
         <dt>Home store</dt><dd>19222 Gulf Fwy, Friendswood, TX 77546 <button class="copy" data-copy="19222 Gulf Fwy, Friendswood, TX 77546">Copy</button></dd>
         <dt>Adrian</dt><dd>Get measured at a store in Baltimore with the same group number. Pickup and return are still in Friendswood.</dd>
         <dt>Fine print</dt><dd>Orders placed inside 14 days of the wedding add a $40 rush fee. Late returns are $20 a day.</dd>
-      </dl>
+      </dl></div></details>
       <div class="dl">
         <div class="d"><small>Get fitted by</small><b>Wed Dec 2</b><span data-tm="2026-12-02">&nbsp;</span><i data-cal="2026-12-02"></i></div>
         <div class="d"><small>Order and pay by</small><b>Sat Dec 26</b><span data-tm="2026-12-26">&nbsp;</span><i data-cal="2026-12-26"></i></div>
@@ -590,8 +640,7 @@ html:has(#splash:not([hidden])){overflow:hidden}
       </div>
       <div class="btns"><a class="btn solid" href="https://www.google.com/maps/search/?api=1&query=Men%27s+Wearhouse+19222+Gulf+Fwy+Friendswood+TX+77546" target="_blank" rel="noopener">Directions to the store</a><a class="btn" href="https://www.menswearhouse.com/store-locator" target="_blank" rel="noopener">Find a store near you</a></div>
     </div>
-    <div class="panel">
-      <h3>Your suit checklist</h3>
+    <div class="panel"><details class="fold solo"><summary><span>Suit checklist</span><span class="fc" data-fc="suit" data-w="done"></span></summary><div class="fold-body">
       <p class="note" style="margin:0 0 10px">Saved on this device only.</p>
       <ul class="checks" data-list="suit">
         <li><label><input type="checkbox" id="suit-1"><span>Measured<small>Group fitting is pencilled for Sat Nov 28. Any day through Dec 2 works.</small></span></label></li>
@@ -599,7 +648,7 @@ html:has(#splash:not([hidden])){overflow:hidden}
         <li><label><input type="checkbox" id="suit-3"><span>Picked up and tried on in the store<small>From Tue Jan 5. Try everything on before you leave.</small></span></label></li>
         <li><label><input type="checkbox" id="suit-4"><span>Returned<small>Sun Jan 10, by close of business.</small></span></label></li>
       </ul>
-    </div>
+    </div></details></div>
   </div>
 </div></section>
 
@@ -623,8 +672,7 @@ html:has(#splash:not([hidden])){overflow:hidden}
       </ul>
       <div class="btns"><a class="btn solid" href="https://www.google.com/maps/search/?api=1&query=11820+Stewart+Rd+Galveston+TX+77554" target="_blank" rel="noopener">Directions</a><a class="btn" href="https://www.vrbo.com/2254730" target="_blank" rel="noopener">See the listing</a></div>
     </div>
-    <div class="panel">
-      <h3>Flight rules</h3>
+    <div class="panel"><details class="fold solo"><summary><span>Flight rules</span><span class="fc" data-fc="rules" data-w="read"></span></summary><div class="fold-body">
       <p class="note" style="margin:0 0 10px">The host’s house rules. Tap each one to acknowledge.</p>
       <ul class="checks" data-list="rules">
         <li><label><input type="checkbox" id="rule-1"><span>Quiet hours 10 PM to 8 AM<small>There are full-time neighbors.</small></span></label></li>
@@ -634,6 +682,7 @@ html:has(#splash:not([hidden])){overflow:hidden}
         <li><label><input type="checkbox" id="rule-5"><span>No parking on the lawn</span></label></li>
         <li><label><input type="checkbox" id="rule-6"><span>Cameras cover the front and the backyard<small>Exterior only.</small></span></label></li>
       </ul>
+    </div></details>
     </div>
   </div>
   <div class="panel" style="margin-top:18px">
@@ -656,13 +705,15 @@ html:has(#splash:not([hidden])){overflow:hidden}
         <li><time>4:30 PM</time><div><b>Doors open</b><span>Guests arrive. Two Galveston officers are on site from here.</span></div></li>
         <li><time>4:55 PM</time><div><b>Line up</b><span>Bayside's coordinator runs the lineup. No rehearsal the day before, so listen for your cue.</span></div></li>
         <li class="big"><time>5:00 PM</time><div><b>Liftoff: the ceremony</b><span>On the deck over Offatts Bayou. Alec officiates. Sunset is around 5:40.</span></div></li>
+      </ol>
+      <details class="fold"><summary><span>After the ceremony</span><span class="fc">6 more</span></summary><ol class="seq" start="6">
         <li><time>~5:20 PM</time><div><b>Bar opens</b><span>Cocktail hour and the first two bites while we take photos.</span></div></li>
         <li><time>~6:05 PM</time><div><b>Grand entrance and first dances</b><span>Walk in loud.</span></div></li>
         <li><time>~6:15 PM</time><div><b>Dinner</b><span>Toasts with prosecco around 6:45.</span></div></li>
         <li><time>~7:05 PM</time><div><b>Cake, then the dance floor</b><span>The photo booth runs all night.</span></div></li>
         <li><time>~8:50 PM</time><div><b>Sparkler send-off</b><span>Out front. Bayside has the lighters.</span></div></li>
         <li><time>9:00 PM</time><div><b>Event ends</b><span>We help pack out. Everyone is clear of the venue by 10:00.</span></div></li>
-      </ol>
+      </ol></details>
     </div>
     <div class="panel">
       <h3>Launch site</h3>
@@ -674,13 +725,13 @@ html:has(#splash:not([hidden])){overflow:hidden}
         <dt>Bring</dt><dd>ID, a little cash, and a jacket for after dark. January on the bay gets windy.</dd>
       </dl>
       <div class="btns"><a class="btn solid" href="https://www.google.com/maps/search/?api=1&query=Bayside+Event+Center+1723+61st+St+Galveston+TX+77551" target="_blank" rel="noopener">Directions</a></div>
-      <h3 style="margin-top:22px">The weekend</h3>
+      <details class="fold"><summary><span>The whole weekend</span><span class="fc">Fri to Mon</span></summary>
       <ol class="seq">
         <li><time>Fri Jan 8</time><div><b>Move in, then dinner</b><span>Check-in from 4 PM. “Rehearsal” dinner at the house around 6.</span></div></li>
         <li><time>Sat Jan 9</time><div><b>Wedding day</b><span>5 PM ceremony, done by 9.</span></div></li>
         <li><time>Sun Jan 10</time><div><b>Recovery</b><span>Tuxes back to Friendswood by close.</span></div></li>
         <li><time>Mon Jan 11</time><div><b>Splashdown</b><span>Out of the house by 11 AM.</span></div></li>
-      </ol>
+      </ol></details>
     </div>
   </div>
 </div></section>
@@ -730,8 +781,7 @@ html:has(#splash:not([hidden])){overflow:hidden}
       <span class="radio-note" id="rNote">Opens the playlist in your Spotify app with add access. Search a song, tap the three dots, then Add to playlist.</span>
     </div>
   </div>
-  <div class="panel pack">
-      <h3>Pack list</h3>
+  <div class="panel pack"><details class="fold solo"><summary><span>Pack list</span><span class="fc" data-fc="pack" data-w="stowed"></span></summary><div class="fold-body">
       <p class="note" style="margin:0 0 10px"><span id="packN">0</span> of 8 stowed. Saved on this device only.</p>
       <ul class="checks" data-list="pack">
         <li><label><input type="checkbox" id="pack-1"><span>Tux, shoes and everything in the bag</span></label></li>
@@ -743,6 +793,7 @@ html:has(#splash:not([hidden])){overflow:hidden}
         <li><label><input type="checkbox" id="pack-7"><span>Phone charger</span></label></li>
         <li><label><input type="checkbox" id="pack-8"><span>Toiletries and whatever you need for Sunday morning</span></label></li>
       </ul>
+  </div></details>
   </div>
 </div></section>
 </main>
@@ -756,6 +807,7 @@ html:has(#splash:not([hidden])){overflow:hidden}
 
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="calMenu" role="menu" aria-label="Add to calendar" hidden></div>
+<nav id="navMenu" aria-label="Sections" hidden></nav>
 <div id="liftoff" hidden><div class="count" id="lcount">3</div><div class="say" id="lsay">Guidance is internal</div>
   <svg class="ship" viewBox="0 0 120 420"><defs><linearGradient id="lf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".3" stop-color="#FFE27A"/><stop offset=".7" stop-color="#FF8A3D"/><stop offset="1" stop-color="#FF2E93" stop-opacity="0"/></linearGradient></defs><path d="M38 200Q20 320 60 420Q100 320 82 200Z" fill="url(#lf)"/><path d="M60 0C88 34 98 80 98 124v76H22v-76C22 80 32 34 60 0Z" fill="#fff"/><path d="M60 0C74 18 84 38 90 60H30C36 38 46 18 60 0Z" fill="#FF2E93"/><circle cx="60" cy="104" r="17" fill="#19E3D2"/><path d="M22 150 0 204l22-10Zm76 0 22 54-22-10Z" fill="#D9C8FF"/></svg></div>
 <svg id="cat" viewBox="0 0 120 120" aria-hidden="true" hidden><circle cx="60" cy="60" r="52" fill="#fff" opacity=".18" stroke="#19E3D2" stroke-width="4"/><path d="M30 44 36 16l20 18Zm60 0-6-28-20 18Z" fill="#1b1b22"/><ellipse cx="60" cy="64" rx="34" ry="30" fill="#1b1b22"/><ellipse cx="47" cy="60" rx="6" ry="8" fill="#FFD166"/><ellipse cx="73" cy="60" rx="6" ry="8" fill="#FFD166"/><path d="M56 72h8l-4 5Z" fill="#FF2E93"/><path d="M26 70l-16-4M26 76l-16 4M94 70l16-4M94 76l16 4" stroke="#fff" stroke-width="2"/></svg>
@@ -916,7 +968,8 @@ $('#heroCal').innerHTML = calHTML(PLAN.find(m => m.launch).cal, 'calrow hero-cal
 (function calMenu(){ const cm = $('#calMenu'), iOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); let btn = null;
   const close = (focus) => { if (cm.hidden) return; cm.hidden = true; if (btn){ btn.setAttribute('aria-expanded', 'false'); if (focus) btn.focus({preventScroll: true}); } btn = null; };
   function open(b){ const c = CALS[+b.dataset.ci]; if (!c) return; const l = calLinks(c), f = icsSlug(c) + '.ics';
-    cm.innerHTML = `<a role="menuitem" href="${esc(l.google)}" target="_blank" rel="noopener">Google Calendar</a><a role="menuitem" href="cal/${f}"${iOS ? '' : ' download="' + f + '"'}>Apple Calendar</a><a role="menuitem" href="${esc(l.outlook)}" target="_blank" rel="noopener">Outlook</a>`;
+    const local = /github\.io$|^localhost$|^127\.|^mc\.test$/.test(location.hostname), icsUrl = (local ? '' : 'https://harana-io.github.io/mission-control/') + 'cal/' + f;
+    cm.innerHTML = `<a role="menuitem" href="${esc(l.google)}" target="_blank" rel="noopener">Google Calendar</a><a role="menuitem" href="${icsUrl}"${iOS || !local ? ' target="_blank" rel="noopener"' : ' download="' + f + '"'}>Apple Calendar</a><a role="menuitem" href="${esc(l.outlook)}" target="_blank" rel="noopener">Outlook</a>`;
     cm.hidden = false; btn = b; b.setAttribute('aria-expanded', 'true'); const r = b.getBoundingClientRect(), w = cm.offsetWidth, h = cm.offsetHeight;
     let x = Math.max(16, Math.min(r.left, innerWidth - 16 - w)), y = r.bottom + 8; if (y + h > innerHeight - 12) y = Math.max(12, r.top - 8 - h);
     cm.style.left = x + 'px'; cm.style.top = y + 'px'; cm.querySelector('a').focus({preventScroll: true}); blip(); }
@@ -924,6 +977,21 @@ $('#heroCal').innerHTML = calHTML(PLAN.find(m => m.launch).cal, 'calrow hero-cal
   document.addEventListener('keydown', e => { if (cm.hidden) return; const items = $$('a', cm), k = items.indexOf(document.activeElement);
     if (e.key === 'Escape'){ e.preventDefault(); close(true); } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp'){ e.preventDefault(); items[(k + (e.key === 'ArrowDown' ? 1 : items.length - 1)) % items.length].focus(); } else if (e.key === 'Tab') close(true); });
   addEventListener('scroll', () => close(), {passive: true}); addEventListener('resize', () => close()); })();
+/* section index: the menu button in the console jumps anywhere on the page */
+(function navMenu(){ const nb = $('#navBtn'), nm = $('#navMenu'), secs = [$('.hero'), ...$$('section.deck')].filter(Boolean); let cur = null;
+  const label = sec => { if (sec.classList.contains('hero')) return {n: 'T', t: 'Top', d: 'Countdown and launch'}; const tag = ($('.tag', sec) || {}).textContent || '', h2 = $('h2', sec), m = tag.match(/^(\d+)\s*·\s*(.+)$/);
+    const t = h2 ? [...h2.childNodes].filter(n => n.nodeName !== 'EM').map(n => n.textContent).join('').trim() : ''; return {n: m ? m[1] : '▶', t: t || tag, d: m ? m[2] : tag.replace(/^.*·\s*/, '')}; };
+  nm.innerHTML = secs.map((sec, i) => { const L = label(sec); return `<a href="#${sec.id || 'top'}" data-i="${i}"><small>${esc(L.n)}</small><b>${esc(L.t)}</b><span>${esc(L.d)}</span></a>`; }).join('');
+  const items = $$('a', nm), close = focus => { if (nm.hidden) return; nm.hidden = true; nb.setAttribute('aria-expanded', 'false'); if (focus) nb.focus({preventScroll: true}); };
+  function open(){ nm.hidden = false; nb.setAttribute('aria-expanded', 'true'); nm.style.top = Math.round($('.hud').getBoundingClientRect().bottom + 8) + 'px'; items.forEach((a, i) => a.setAttribute('aria-current', i === cur)); (items[cur] || items[0]).focus({preventScroll: true}); blip(); }
+  nb.addEventListener('click', e => { e.stopPropagation(); nm.hidden ? open() : close(); });
+  nm.addEventListener('click', e => { const a = e.target.closest('a'); if (!a) return; e.preventDefault(); const sec = secs[+a.dataset.i]; close(); if (!sec) return;
+    const y = sec.classList.contains('hero') ? 0 : sec.getBoundingClientRect().top + scrollY - $('.hud').getBoundingClientRect().height + 2; scrollTo({top: Math.max(0, y), behavior: reduce ? 'auto' : 'smooth'}); blip(); });
+  document.addEventListener('click', e => { if (!nm.hidden && !e.target.closest('#navMenu, #navBtn')) close(); });
+  document.addEventListener('keydown', e => { if (nm.hidden) return; const k = items.indexOf(document.activeElement);
+    if (e.key === 'Escape'){ e.preventDefault(); close(true); } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp'){ e.preventDefault(); items[(k + (e.key === 'ArrowDown' ? 1 : items.length - 1)) % items.length].focus(); } else if (e.key === 'Tab') close(true); });
+  addEventListener('resize', () => close());
+  if ('IntersectionObserver' in window){ const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) cur = secs.indexOf(en.target); }), {rootMargin: '-40% 0px -55% 0px'}); secs.forEach(x => io.observe(x)); } })();
 
 /* ---------- crew and the go / no-go poll ---------- */
 const go = store.get('go', {});
@@ -941,7 +1009,8 @@ $('#crewGrid').addEventListener('click', e => { const b = e.target.closest('[dat
 /* ---------- checklists (per device) ---------- */
 const checks = store.get('checks', {});
 $$('.checks input').forEach(i => { i.checked = !!checks[i.id]; i.addEventListener('change', () => { checks[i.id] = i.checked; store.set('checks', checks); i.checked ? chirp() : blip(); packCount(); }); });
-function packCount(){ $('#packN').textContent = $$('[data-list="pack"] input').filter(i => i.checked).length; } packCount();
+function packCount(){ $('#packN').textContent = $$('[data-list="pack"] input').filter(i => i.checked).length;
+  $$('[data-fc]').forEach(el => { const ins = $$(`[data-list="${el.dataset.fc}"] input`), k = ins.filter(i => i.checked).length; el.textContent = k + ' of ' + ins.length + ' ' + el.dataset.w; el.classList.toggle('all', k === ins.length); }); } packCount();
 
 /* ---------- copy buttons ---------- */
 document.addEventListener('click', e => { const b = e.target.closest('[data-copy]'); if (!b) return; const txt = b.dataset.copy; const ok = () => { b.textContent = 'Copied'; blip(); setTimeout(() => b.textContent = 'Copy', 1600); };
@@ -1027,6 +1096,12 @@ function tilt(els){ if (reduce || !matchMedia('(hover: hover)').matches) return;
   el.addEventListener('pointermove', e => { if (!r) r = el.getBoundingClientRect(); ev = e; if (!q){ q = true; requestAnimationFrame(paint); } });
   el.addEventListener('pointerleave', () => { r = null; ev = null; el.style.setProperty('--rx', '0deg'); el.style.setProperty('--ry', '0deg'); }); }); }
 renderCrew(); tilt([$('#patch')]);
+/* crew dots for the swipe row on phones */
+(function crewDots(){ const g = $('#crewGrid'), d = $('#crewDots'); if (!g || !d) return; const cards = () => $$('.card', g);
+  d.innerHTML = CREW.map((c, i) => `<button type="button" aria-label="Show ${esc(c.name)}" data-i="${i}"></button>`).join(''); const dots = $$('button', d);
+  const mark = () => { const x = g.scrollLeft, cs = cards(); let best = 0, bd = 1e9; cs.forEach((c, i) => { const dd = Math.abs(c.offsetLeft - g.offsetLeft - x - parseFloat(getComputedStyle(g).paddingLeft) + 0); if (dd < bd){ bd = dd; best = i; } }); dots.forEach((b, i) => b.setAttribute('aria-current', i === best)); };
+  d.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; const c = cards()[+b.dataset.i]; if (c) g.scrollTo({left: c.offsetLeft - g.offsetLeft - parseFloat(getComputedStyle(g).paddingLeft), behavior: reduce ? 'auto' : 'smooth'}); });
+  let q = false; g.addEventListener('scroll', () => { if (!q){ q = true; requestAnimationFrame(() => { q = false; mark(); }); } }, {passive: true}); mark(); })();
 
 /* ---------- starfield: parallax on scroll, a comet behind the cursor, warp on demand ---------- */
 const cv = $('#stars'), cx = cv.getContext('2d'); let W = 0, H = 0, stars = [], warp = 0, mouse = null, trail = [], scrollY0 = 0;
@@ -1069,7 +1144,7 @@ if (window.gsap && window.ScrollTrigger && !reduce){ gsap.registerPlugin(ScrollT
   const narrow = innerWidth < 900;
   gsap.set('.anat-stage', {rotateX: 50, rotateZ: -16, scale: narrow ? .72 : .8});
   L.forEach((el, i) => gsap.set(el, {z: i * (narrow ? 22 : 38), y: narrow ? -70 : -110, opacity: 0}));
-  const atl = gsap.timeline({scrollTrigger: {trigger: '#insignia', start: () => 'top ' + Math.round($('.hud').getBoundingClientRect().height - 8) + 'px', end: () => '+=' + (innerWidth < 900 ? 1700 : 2200), pin: true, invalidateOnRefresh: true, scrub: .6, anticipatePin: 1,
+  const atl = gsap.timeline({scrollTrigger: {trigger: '#insignia', start: () => 'top ' + Math.round($('.hud').getBoundingClientRect().height - 8) + 'px', end: () => '+=' + (innerWidth < 900 ? 1250 : 1700), pin: true, invalidateOnRefresh: true, scrub: .6, anticipatePin: 1,
     onUpdate: self => { const t = self.progress * atl.duration(), k = Math.max(1, Math.min(6, Math.floor(t) + 1));
       if (k !== cur){ cur = k; items.forEach(li => li.classList.toggle('on', +li.dataset.k === k)); $('#anatN').textContent = pad(k); blip(); } } }});
   L.forEach((el, i) => atl.to(el, {y: 0, opacity: 1, duration: .9, ease: 'power2.out'}, i));
