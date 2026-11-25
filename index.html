@@ -822,6 +822,8 @@ const LAUNCH = new Date('2027-01-09T17:00:00-06:00');
 const PLAYLIST_URL = 'https://open.spotify.com/playlist/1CV8o9cbQmChH1QqO6IJMl';
 /* Spotify collaborator invite link (playlist menu > Invite collaborators). When set, the button opens the playlist AND gives add rights. Invite links expire after 7 days. */
 const PLAYLIST_INVITE = 'https://open.spotify.com/playlist/1CV8o9cbQmChH1QqO6IJMl?si=080b7786eac54216&pt=4e884173d38c93af2ed19eb1b4c246c3';
+/* the invite was made Nov 24 and lasts about a week; after this the button falls back to the plain playlist */
+const INVITE_UNTIL = new Date('2026-12-01T12:00:00-06:00'), CAN_ADD = !!PLAYLIST_INVITE && Date.now() < INVITE_UNTIL;
 const CREW = [
   {id:'earl', known:'Disc golf · D&D · itineraries', name:'Earl', station:'CDR', role:'Commander · Groom', duty:'Planned Bohol to the hour and went on his first hunt in Jordans. On January 9 someone else holds the clipboard.'},
   {id:'alec', known:'Rockets · Texans · fajitas', name:'Alec', station:'FLIGHT', role:'Flight Director · Officiant', duty:'Runs the ceremony. Engineers life-saving medicine by day and flew this exact mission in May with this crew.'},
@@ -1036,12 +1038,14 @@ $('.shore').addEventListener('click', () => toast('Not the Bullet, but close. Fl
 if ('IntersectionObserver' in window){ const vis = new IntersectionObserver(es => es.forEach(e => { e.target.classList.toggle('offscreen', !e.isIntersecting);
   e.target.querySelectorAll('svg').forEach(v => { try { e.isIntersecting ? v.unpauseAnimations() : v.pauseAnimations(); } catch (err) {} }); }), {rootMargin: '120px 0px'});
   $$('.hero, section.deck, footer').forEach(el => vis.observe(el)); }
-$('#plBtn').href = PLAYLIST_INVITE || PLAYLIST_URL;
+$('#plBtn').href = CAN_ADD ? PLAYLIST_INVITE : PLAYLIST_URL;
+const ADD_NOTE = CAN_ADD ? 'Opens the playlist in your Spotify app with add access. Search a song, tap the three dots, then Add to playlist.' : 'Opens the playlist in your Spotify app. Want to add songs? Ask Earl for a fresh invite link.';
+$('#rNote').textContent = ADD_NOTE;
 /* Crew Radio: the real Spotify player through its iFrame API, started on the first tap and paused from the header.
    If this host blocks Spotify (the claude.ai link does), it stays a tape deck that opens Spotify and the header control stays hidden. */
 (function crewRadio(){
   const slot = $('#spSlot'), radio = $('#radio'), mus = $('#mus'), film = $('#filmV'), id = (PLAYLIST_URL.match(/playlist\/([A-Za-z0-9]+)/) || [])[1];
-  const LIVE_NOTE = 'Previews play here. For full songs and to add your own, tap Open in Spotify: it opens the playlist with add access.';
+  const LIVE_NOTE = CAN_ADD ? 'Previews play here. For full songs and to add your own, tap Open in Spotify: it opens the playlist with add access.' : 'Previews play here. For full songs, tap Open in Spotify.';
   let blocked = false, tuned = false, live = false, ctl = null, playing = false, started = false, want = false, filmHold = false, said = false, wt;
   const duck = () => { const was = want || playing || mus.dataset.st === 'wait'; want = false; clearTimeout(wt); if (!was) return; filmHold = true; if (ctl && live) ctl.pause(); if (mus.dataset.st === 'wait') setMus('off'); };
   const tune = (f, st, t) => { $('#rFreq').textContent = f; $('#rSt').textContent = st; radio.style.setProperty('--tune', t); $('#rKnobA').style.setProperty('--rot', (t * 300 - 150) + 'deg'); $('#rKnobB').style.setProperty('--rot', (t * -220 + 40) + 'deg'); };
@@ -1049,7 +1053,7 @@ $('#plBtn').href = PLAYLIST_INVITE || PLAYLIST_URL;
   const tape = () => { if (!live) tune('101.9', 'TAPE', .69); };
   function onAir(){ if (live || blocked) return; live = true; slot.dataset.state = 'live'; tune('101.9', 'LIVE', .69); $('#rNote').textContent = LIVE_NOTE;
     if (ctl){ mus.hidden = false; setMus('off'); if (want) start(false); } }
-  document.addEventListener('securitypolicyviolation', e => { if (/spotify/.test(e.blockedURI || '') && !blocked){ blocked = true; mus.hidden = true; $('#spTray').textContent = ''; slot.dataset.state = 'offair'; tune('101.9', 'TAPE', .69); $('#rNote').textContent = 'Opens the playlist in your Spotify app with add access. Search a song, tap the three dots, then Add to playlist.'; } });
+  document.addEventListener('securitypolicyviolation', e => { if (/spotify/.test(e.blockedURI || '') && !blocked){ blocked = true; mus.hidden = true; $('#spTray').textContent = ''; slot.dataset.state = 'offair'; tune('101.9', 'TAPE', .69); $('#rNote').textContent = ADD_NOTE; } });
   function watch(asked){ clearTimeout(wt); wt = setTimeout(() => { if (playing) return; want = false; setMus('off'); if (asked) toast('This browser wants a tap on the player itself. It is in Crew Radio, near the bottom.'); }, 5000); }
   function start(asked){ if (!ctl || !live) { want = true; return; } want = true; setMus('wait'); started ? ctl.resume() : ctl.play(); watch(asked); }
   function frame(src){ const f = document.createElement('iframe'); f.title = 'Mission Control crew playlist on Spotify';
