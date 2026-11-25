@@ -74,7 +74,7 @@ a{color:var(--teal)} button{font:inherit;color:inherit;cursor:pointer;border:0;b
 .iconbtn{width:38px;height:38px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center}
 .iconbtn svg{width:18px;height:18px}
 .iconbtn[aria-pressed="true"]{background:var(--pink);border-color:var(--pink);color:var(--on-accent)}
-.prog{position:absolute;left:0;bottom:-1px;height:2px;width:calc(var(--p,0) * 100%);background:linear-gradient(90deg,var(--teal),var(--pink),var(--orange))}
+.prog{position:absolute;left:0;bottom:-1px;height:2px;width:100%;transform:scaleX(var(--p,0));transform-origin:0 50%;background:linear-gradient(90deg,var(--teal),var(--pink),var(--orange))}
 /* flight path rail: a rocket that climbs as you descend the page */
 .rail{position:fixed;right:max(10px,env(safe-area-inset-right,0px));top:90px;bottom:28px;width:26px;z-index:40;display:none}
 .rail::before{content:"";position:absolute;left:12px;top:0;bottom:0;width:2px;background:repeating-linear-gradient(var(--line-2) 0 6px,transparent 6px 12px)}
@@ -120,6 +120,7 @@ h1 .script{display:block;font-family:var(--f-script);font-style:normal;font-weig
 @keyframes jit{25%{translate:.6px -.5px}75%{translate:-.6px .4px}}
 .hint{font-family:var(--f-mono);font-size:12.5px;color:var(--ink);opacity:.85}
 .patch-wrap{position:relative;justify-self:center;width:min(100%,460px,62vh);aspect-ratio:1;perspective:900px}
+@media (max-width:879px){.patch-wrap{margin-top:clamp(26px,7vw,44px)}}
 .patch{width:100%;height:100%;border-radius:50%;display:block;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease-out;
   box-shadow:0 30px 80px #0009,0 0 70px color-mix(in srgb,var(--pink) 40%,transparent);animation:float 7s ease-in-out infinite;cursor:pointer}
 .patch-wrap .halo{position:absolute;inset:-5%;border-radius:50%;border:1px dashed color-mix(in srgb,var(--teal) 55%,transparent);animation:spin 60s linear infinite}
@@ -327,6 +328,15 @@ html.anat-live .anat-list li.on{opacity:1;border-color:var(--teal);transform:tra
 .dl{container-type:inline-size}@container (max-width:479px){.dl .d{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:4px;padding:10px 10px 10px 12px}.dl .d small,.dl .d b{grid-column:1 / -1}.dl .d small{letter-spacing:.06em;font-size:10.5px}.dl .d>span{white-space:nowrap;font-size:11.5px}.dl .d b{font-size:24px}.dl .d .calrow{grid-column:2;grid-row:3;margin:0}.dl .d .calbtn{width:40px;height:40px;min-height:40px;padding:0;justify-content:center;border-radius:50%}.dl .d .calbtn span,.dl .d .calbtn .chev{display:none}.dl .d .calbtn svg{width:18px;height:18px}}
 @media (max-width:359px){.dl{grid-template-columns:minmax(0,1fr)}}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0;padding:0;list-style:none}
+@media (max-width:520px){.stay .chips{gap:6px}.stay .chips li{font-size:13px;padding:5px 10px}}
+.stay .addr{margin:2px 0 0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.stay-dates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+.stay-dates div{border:1px solid var(--line-2);border-radius:14px;padding:10px 12px;background:color-mix(in srgb,var(--bg) 40%,transparent)}
+.stay-dates small{display:block;font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--pink)}
+.stay-dates b{display:block;font-family:var(--f-display);font-weight:800;font-size:24px;line-height:1.1;text-transform:uppercase}
+.stay-dates span{font-family:var(--f-mono);font-size:12px;color:var(--gold)}
+.stay-bar{margin:0;padding:10px 12px;border-radius:12px;border:1px dashed color-mix(in srgb,var(--gold) 55%,transparent);color:var(--ink-2)}
+.stay-bar b{color:var(--gold)}
 .chips li{padding:6px 12px;border-radius:999px;border:1px solid var(--line-2);font-size:14px;background:color-mix(in srgb,var(--bg) 35%,transparent);transition:transform .2s,border-color .2s}
 .chips li:hover{transform:translateY(-3px) rotate(-1.5deg);border-color:var(--pink)}
 
@@ -484,7 +494,8 @@ footer .sig{font-family:var(--f-script);font-size:clamp(34px,7vw,58px);color:var
 @keyframes ascend{0%{bottom:-40%}60%{bottom:30%}100%{bottom:140%}}
 @keyframes shake{25%{translate:-5px 3px}50%{translate:4px -4px}75%{translate:-3px -2px}}
 @keyframes drift{0%{left:-140px;rotate:-12deg}50%{top:22%;rotate:10deg}100%{left:110vw;rotate:-8deg}}
-html:has(#splash:not([hidden])){overflow:hidden}
+html:not(.sp-off):has(#splash:not([hidden])){overflow:hidden}
+.sp-off #splash{display:none}
 #splash[hidden]{display:none}
 #splash{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:max(24px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(24px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));color:#F4ECFF;overflow:hidden;touch-action:none;overscroll-behavior:contain;isolation:isolate}
 #splash::before,#splash::after{content:"";position:absolute;left:0;right:0;height:50.2%;z-index:-2;transition:transform .9s cubic-bezier(.75,0,.2,1)}
@@ -538,6 +549,7 @@ html:has(#splash:not([hidden])){overflow:hidden}
 <div class="sky sky-space"></div><div class="sky sky-dawn"></div>
 <canvas id="stars" aria-hidden="true"></canvas><div class="grain" aria-hidden="true"></div>
 
+<script>try{if(/[?&]splash=0/.test(location.search)||JSON.parse(localStorage.getItem("mc:seen")||"0"))document.documentElement.classList.add("sp-off")}catch(e){}</script>
 <div id="splash" role="dialog" aria-modal="true" aria-labelledby="spT">
   <div class="sp-stars" id="spStars" aria-hidden="true"></div>
   <div class="sp-in">
@@ -685,31 +697,32 @@ html:has(#splash:not([hidden])){overflow:hidden}
   <div class="deck-head"><div><div class="tag">04 · Base camp</div><h2>Las Palomas <em>the house</em></h2></div></div>
   <p class="deck-sub rhythm">Thirteen acres, a pool, a pickleball court and a fishing pond. Base camp has never had it this good.</p>
   <div class="two">
-    <div class="panel">
+    <div class="panel stay">
       <h3>Where we’re all staying</h3>
-      <dl class="kv">
-        <dt>Address</dt><dd>11820 Stewart Rd, Galveston, TX 77554 <button class="copy" data-copy="11820 Stewart Rd, Galveston, TX 77554">Copy</button></dd>
-        <dt>Check-in</dt><dd><b>Fri Jan 8</b>, from 4:00 PM</dd>
-        <dt>Check-out</dt><dd><b>Mon Jan 11</b>, by 11:00 AM</dd>
-        <dt>Access</dt><dd>The door instructions and WiFi post on Tue Jan 5. Earl relays them to the group chat.</dd>
-        <dt>Parking</dt><dd>Room for 8 cars at the front and side. Never on the lawn, so carpool if you can.</dd>
-        <dt>Bar</dt><dd>Stocked. The commander is covering all the alcohol you need at the house.</dd>
-        <dt>To the venue</dt><dd>Bayside is on 61st Street, a short drive east on the island.</dd>
-      </dl>
+      <p class="addr">11820 Stewart Rd, Galveston, TX 77554 <button class="copy" data-copy="11820 Stewart Rd, Galveston, TX 77554">Copy</button></p>
+      <div class="stay-dates">
+        <div><small>Check in</small><b>Fri Jan 8</b><span>from 4:00 PM</span></div>
+        <div><small>Check out</small><b>Mon Jan 11</b><span>by 11:00 AM</span></div>
+      </div>
+      <p class="stay-bar"><b>Bar’s stocked.</b> The commander is covering all the alcohol you need at the house.</p>
       <ul class="chips" aria-label="What the house has">
-        <li>13 acres</li><li>7,400 sq ft</li><li>Saltwater pool</li><li>Pickleball court</li><li>Fishing pond</li><li>Two fire pits</li><li>Billiards room and bar</li><li>Ping pong</li><li>Foosball</li><li>Arcade games</li><li>Chef’s kitchen</li><li>Beach in 5 minutes</li>
+        <li>Saltwater pool</li><li>Pickleball</li><li>Fishing pond</li><li>Fire pits</li><li>Billiards</li><li>Ping pong</li><li>Arcade</li><li>Beach 5 min away</li>
       </ul>
+      <details class="fold"><summary><span>Getting in and parking</span></summary><div class="fold-body"><dl class="kv">
+        <dt>Door and WiFi</dt><dd>The door instructions and WiFi post on Tue Jan 5. Earl sends them to the group chat.</dd>
+        <dt>Parking</dt><dd>Room for 8 cars out front and on the side, so carpool if you can.</dd>
+        <dt>To the venue</dt><dd>Bayside is on 61st Street, a short drive east on the island.</dd>
+      </dl></div></details>
       <div class="btns"><a class="btn solid" href="https://www.google.com/maps/search/?api=1&query=11820+Stewart+Rd+Galveston+TX+77554" target="_blank" rel="noopener">Directions</a><a class="btn" href="https://www.vrbo.com/2254730" target="_blank" rel="noopener">See the listing</a></div>
     </div>
     <div class="panel"><details class="fold solo" data-wide-open><summary><span>Flight rules</span><span class="fc" data-fc="rules" data-w="read"></span></summary><div class="fold-body">
-      <p class="note" style="margin:0 0 10px">The host’s house rules. Tap each one to acknowledge.</p>
+      <p class="note" style="margin:0 0 10px">The host’s house rules. Tap each one once you’ve got it.</p>
       <ul class="checks" data-list="rules">
-        <li><label><input type="checkbox" id="rule-1"><span>Quiet hours 10 PM to 8 AM<small>There are full-time neighbors.</small></span></label></li>
-        <li><label><input type="checkbox" id="rule-2"><span>No parties at the house<small>Breaking this one is an $850 fine and an eviction.</small></span></label></li>
-        <li><label><input type="checkbox" id="rule-3"><span>Hands off the pool filtration system<small>$500 fine. The hot tub is not heated.</small></span></label></li>
-        <li><label><input type="checkbox" id="rule-4"><span>AC stays at 70 or above<small>Lower and the unit freezes up.</small></span></label></li>
-        <li><label><input type="checkbox" id="rule-5"><span>No parking on the lawn</span></label></li>
-        <li><label><input type="checkbox" id="rule-6"><span>Cameras cover the front and the backyard<small>Exterior only.</small></span></label></li>
+        <li><label><input type="checkbox" id="rule-1"><span>Quiet hours 10 PM to 8 AM<small>The neighbors live there full time.</small></span></label></li>
+        <li><label><input type="checkbox" id="rule-2"><span>No parties at the house<small>Just us. That’s the host’s biggest rule.</small></span></label></li>
+        <li><label><input type="checkbox" id="rule-3"><span>Leave the pool equipment alone<small>And the hot tub isn’t heated, so don’t bother.</small></span></label></li>
+        <li><label><input type="checkbox" id="rule-4"><span>AC stays at 70 or above<small>Any lower and the unit freezes up.</small></span></label></li>
+        <li><label><input type="checkbox" id="rule-5"><span>Park on the drive, not the lawn</span></label></li>
       </ul>
     </div></details>
     </div>
@@ -959,7 +972,7 @@ addEventListener('pointerup', () => { if (soundOn && (!ac || ac.state !== 'runni
   if (!reduce) for (let i = 0; i < 70; i++){ const x = document.createElement('i'); x.style.cssText = `left:${(Math.random() * 100).toFixed(1)}%;top:${(Math.random() * 100).toFixed(1)}%;--d:${(1.6 + Math.random() * 3).toFixed(2)}s;--o:${(.25 + Math.random() * .75).toFixed(2)}`; st.appendChild(x); }
   const later = (f, ms) => timers.push(setTimeout(f, ms));
   const inert = on => [...document.body.children].forEach(el => { if (el !== sp && el.tagName !== 'SCRIPT') el.inert = on; });
-  function run(fast){ timers.forEach(clearTimeout); timers = []; done = false; log.textContent = ''; bar.style.width = '0'; sp.classList.remove('out', 'ready'); sp.hidden = false; inert(true);
+  function run(fast){ root.classList.remove('sp-off'); timers.forEach(clearTimeout); timers = []; done = false; log.textContent = ''; bar.style.width = '0'; sp.classList.remove('out', 'ready'); sp.hidden = false; inert(true);
     const step = fast ? 70 : 250; LOG.forEach(([k, v], i) => later(() => { const li = document.createElement('li'); li.innerHTML = `<span>${esc(k)}</span><b>${esc(v)}</b>`; log.appendChild(li); bar.style.width = ((i + 1) / LOG.length * 100) + '%'; }, 200 + step * i));
     later(() => sp.classList.add('ready'), 260 + step * LOG.length); $('#spGo').focus({preventScroll: true}); }
   function enter(loud){ if (done) return; done = true; store.set('seen', 1);
@@ -986,7 +999,7 @@ setSky(store.get('sky', 'sunset'));
 
 /* ---------- countdown ---------- */
 const dayMs = 864e5, last = {};
-function setNum(id, v){ const el = $('#' + id); if (last[id] === v) return; last[id] = v; el.textContent = v; if (!reduce){ el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick'); } }
+function setNum(id, v){ const el = $('#' + id); if (last[id] === v) return; last[id] = v; el.textContent = v; if (!reduce && el.animate) el.animate([{transform: 'translateY(-22%)', opacity: .3}, {transform: 'none', opacity: 1}], {duration: 450, easing: 'ease-out'}); }
 function tickClock(){ let ms = LAUNCH - Date.now(); const up = ms < 0; ms = Math.abs(ms); const d = Math.floor(ms / dayMs), h = Math.floor(ms / 36e5) % 24, m = Math.floor(ms / 6e4) % 60, s = Math.floor(ms / 1e3) % 60;
   setNum('cd', d); setNum('ch', pad(h)); setNum('cm', pad(m)); setNum('cs', pad(s)); $('#hudT').textContent = (up ? '+' : '-') + pad(d) + ':' + pad(h) + ':' + pad(m) + ':' + pad(s); }
 /* tick just after each real second, so the display never drifts, skips or doubles a second; catch up at once when the phone wakes */
@@ -1124,14 +1137,14 @@ $('#rNote').textContent = ADD_NOTE;
   /* When the song changes, Spotify's player scrolls its own track list to the new song, and the browser carries that
      scroll up to this page, gliding the reader down to the radio. A scroll nobody asked for (no touch, wheel, key or
      pointer, and not one of our own jumps) that heads for an off-screen radio gets undone on its first frame. */
-  let trayOn = false, userAt = 0, down = false, anchorY = scrollY, lastScroll = 0, seqUser = true; const born = performance.now();
+  let trayOn = false, userAt = 0, down = false, anchorY = scrollY, lastScroll = 0, seqUser = true; const born = performance.now(), coast = matchMedia('(pointer: coarse)').matches ? 3500 : 900;
   if ('IntersectionObserver' in window) new IntersectionObserver(es => es.forEach(e => { trayOn = e.isIntersecting; })).observe(slot);
   const mark = () => { userAt = performance.now(); };
   ['wheel', 'touchstart', 'touchmove', 'keydown', 'pointerdown'].forEach(n => addEventListener(n, mark, {passive: true, capture: true}));
   addEventListener('pointerdown', () => { down = true; }, {capture: true}); ['pointerup', 'pointercancel'].forEach(n => addEventListener(n, () => { down = false; mark(); }, {capture: true}));
   window.mcOwnScroll = (ms = 2500) => { userAt = performance.now() + ms - 900; };
   addEventListener('scroll', () => { const now = performance.now(), fresh = now - lastScroll > 150; lastScroll = now;
-    if (fresh) seqUser = down || now - userAt < 900 || !ctl || !live || now - born < 4000;
+    if (fresh) seqUser = down || now - userAt < coast || !ctl || !live || !playing || now - born < 4000;
     if (seqUser){ anchorY = scrollY; return; }
     const trayY = slot.getBoundingClientRect().top + scrollY, toward = Math.sign(scrollY - anchorY) === Math.sign(trayY - anchorY - innerHeight / 2);
     if (!trayOn && toward && Math.abs(scrollY - anchorY) > 60){ userAt = now + 300 - 900; scrollTo({top: anchorY, behavior: 'instant'}); } }, {passive: true});
@@ -1183,9 +1196,10 @@ function goWarp(){ warp = 1; if (reduce) requestAnimationFrame(frame); }
 /* ---------- scroll progress drives the sky, the rail rocket and the plan line ---------- */
 const pEls = $$('.sky-dawn, .prog, .rail'), planEl = $('#planList'), altEl = $('#alt'), msEls = $$('#planList .ms'); let sTick = false, karman = false, lastAlt = -1;
 function applyScroll(){ sTick = false; const max = document.documentElement.scrollHeight - innerHeight, p = max > 0 ? Math.min(1, scrollY / max) : 0, ps = p.toFixed(4);
+  const r = planEl.getBoundingClientRect(); let f = null, lit = null;
+  if (r.bottom > -200 && r.top < innerHeight + 200){ f = Math.max(0, Math.min(1, (innerHeight * .7 - r.top) / r.height)); const tip = r.top + 6 + (r.height - 12) * f; lit = msEls.map(m => m.getBoundingClientRect().top + 27 <= tip + 1); }
   pEls.forEach(e => e.style.setProperty('--p', ps));
-  const r = planEl.getBoundingClientRect(); if (r.bottom > -200 && r.top < innerHeight + 200) { const f = Math.max(0, Math.min(1, (innerHeight * .7 - r.top) / r.height)); planEl.style.setProperty('--plan', f.toFixed(3)); const tip = r.top + 6 + (r.height - 12) * f;
-    msEls.forEach(m => { const on = m.getBoundingClientRect().top + 27 <= tip + 1; if (on !== m.classList.contains('lit')) m.classList.toggle('lit', on); }); }
+  if (f !== null){ planEl.style.setProperty('--plan', f.toFixed(3)); msEls.forEach((m, i) => { if (lit[i] !== m.classList.contains('lit')) m.classList.toggle('lit', lit[i]); }); }
   const mi = Math.round(p * 254); if (mi !== lastAlt){ lastAlt = mi; altEl.textContent = mi >= 254 ? '254 · ORBIT' : mi; }
   if (!karman && mi >= 62){ karman = true; toast('Crossed the Kármán line at 62 miles. Officially in space.'); } }
 function onScroll(){ if (!sTick){ sTick = true; requestAnimationFrame(applyScroll); } }
