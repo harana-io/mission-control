@@ -35,7 +35,7 @@
 :root[data-sky="daybreak"]{
   color-scheme:light;
   --bg:#FFF3E2; --bg-2:#FFE2CC; --panel:#FFFFFFd9; --panel-solid:#FFFFFF; --line:#F1C9A8; --line-2:#E39A6B;
-  --ink:#2A0E4F; --ink-2:#5B3A86; --ink-3:#8A6BAE; --pink:#D81B77; --teal:#0A8F86; --orange:#D9641A; --gold:#946200;
+  --ink:#2A0E4F; --ink-2:#5B3A86; --ink-3:#7A5C9E; --pink:#D81B77; --teal:#087A72; --orange:#D9641A; --gold:#946200;
   --sky-b:#FFD0B0; --sky-c:#FFB3A8; --sky-d:#F58FB0; --sky-e:#C9A2F2; --go:#0B8A5B; --hold:#B5670A; --on-accent:#FFFFFF; --sil:#3A1A63;
 }
 *{box-sizing:border-box}
@@ -215,6 +215,7 @@ html.anat-live .anat-list li.on{opacity:1;border-color:var(--teal);transform:tra
 .card p{margin:10px 0 12px;color:var(--ink-2);font-size:15px;flex:1}
 .card small{display:block;font-family:var(--f-mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);margin-bottom:3px}
 .card .known{margin-bottom:14px}.card .known span{font-family:var(--f-mono);font-size:12.5px;color:var(--teal);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+@media (max-width:370px){.card .known span{white-space:normal}}
 .card .gobtn{margin-top:auto}
 .gobtn{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border-radius:12px;border:1px solid var(--line-2);font-family:var(--f-display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:15px}
 .gobtn .led{width:12px;height:12px;border-radius:50%;background:var(--hold);box-shadow:0 0 10px var(--hold)}
