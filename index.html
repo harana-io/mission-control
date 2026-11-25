@@ -742,7 +742,7 @@ html:has(#splash:not([hidden])){overflow:hidden}
   <div class="tabs" role="tablist"><button role="tab" aria-selected="true" data-tab="food">Galley</button><button role="tab" aria-selected="false" data-tab="bar">Fuel</button></div>
   <div class="menu" id="tab-food">
     <div class="panel"><h3>Passed first</h3><ul><li>Bruschetta</li><li>Teriyaki chicken satay</li></ul></div>
-    <div class="panel"><h3>Dinner</h3><ul><li>Beef demi-glace</li><li>Chicken</li><li>Garlic mashed potatoes</li><li>Haricots verts almondine</li><li>Spring greens fruited salad</li></ul></div>
+    <div class="panel"><h3>Dinner</h3><ul><li>Chicken with a beef demi-glace</li><li>Garlic mashed potatoes</li><li>Haricots verts almondine</li><li>Spring greens fruited salad</li></ul></div>
     <div class="panel"><h3>After</h3><ul><li>Wedding cake</li></ul><p class="note" style="margin:10px 0 0">Allergy or diet question? Tell Earl before the final count goes in on Dec 26.</p></div>
   </div>
   <div class="menu" id="tab-bar" hidden>
@@ -989,7 +989,7 @@ $('#heroCal').innerHTML = calHTML(PLAN.find(m => m.launch).cal, 'calrow hero-cal
   nb.addEventListener('click', e => { e.stopPropagation(); nm.hidden ? open() : close(); });
   nm.addEventListener('click', e => { const a = e.target.closest('a'); if (!a) return; e.preventDefault(); const sec = secs[+a.dataset.i]; close(); if (!sec) return;
     const box = sec.parentElement && sec.parentElement.classList.contains('pin-spacer') ? sec.parentElement : sec;
-    const y = sec.classList.contains('hero') ? 0 : box.getBoundingClientRect().top + scrollY - $('.hud').getBoundingClientRect().height + 2; scrollTo({top: Math.max(0, y), behavior: reduce ? 'auto' : 'smooth'});
+    const y = sec.classList.contains('hero') ? 0 : box.getBoundingClientRect().top + scrollY - $('.hud').getBoundingClientRect().height + 2; if (window.mcOwnScroll) mcOwnScroll(2500); scrollTo({top: Math.max(0, y), behavior: reduce ? 'auto' : 'smooth'});
     const hd = $('h1, h2', sec); if (hd){ if (!hd.hasAttribute('tabindex')) hd.setAttribute('tabindex', '-1'); hd.focus({preventScroll: true}); } blip(); });
   document.addEventListener('click', e => { if (!nm.hidden && !e.target.closest('#navMenu, #navBtn')) close(); });
   document.addEventListener('keydown', e => { if (nm.hidden) return; const k = items.indexOf(document.activeElement);
@@ -1083,6 +1083,21 @@ $('#plBtn').href = PLAYLIST_INVITE || PLAYLIST_URL;
     else { store.set('musicOff', false); start(true); } });
   /* the launch film gets the speakers; the radio picks back up when it ends */
   film.addEventListener('play', duck);
+  /* When the song changes, Spotify's player scrolls its own track list to the new song, and the browser carries that
+     scroll up to this page, gliding the reader down to the radio. A scroll nobody asked for (no touch, wheel, key or
+     pointer, and not one of our own jumps) that heads for an off-screen radio gets undone on its first frame. */
+  let trayOn = false, userAt = 0, down = false, anchorY = scrollY, lastScroll = 0, seqUser = true; const born = performance.now();
+  if ('IntersectionObserver' in window) new IntersectionObserver(es => es.forEach(e => { trayOn = e.isIntersecting; })).observe(slot);
+  const mark = () => { userAt = performance.now(); };
+  ['wheel', 'touchstart', 'touchmove', 'keydown', 'pointerdown'].forEach(n => addEventListener(n, mark, {passive: true, capture: true}));
+  addEventListener('pointerdown', () => { down = true; }, {capture: true}); ['pointerup', 'pointercancel'].forEach(n => addEventListener(n, () => { down = false; mark(); }, {capture: true}));
+  window.mcOwnScroll = (ms = 2500) => { userAt = performance.now() + ms - 900; };
+  addEventListener('scroll', () => { const now = performance.now(), fresh = now - lastScroll > 150; lastScroll = now;
+    if (fresh) seqUser = down || now - userAt < 900 || !ctl || !live || now - born < 4000;
+    if (seqUser){ anchorY = scrollY; return; }
+    const trayY = slot.getBoundingClientRect().top + scrollY, toward = Math.sign(scrollY - anchorY) === Math.sign(trayY - anchorY - innerHeight / 2);
+    if (!trayOn && toward && Math.abs(scrollY - anchorY) > 60){ userAt = now + 300 - 900; scrollTo({top: anchorY, behavior: 'instant'}); } }, {passive: true});
+  if (/[?&]debug=radio/.test(location.search)) window.__radio = () => ctl;
   window.mcRadio = {duck, cancelAuto: quit,
     play(){ if (playing || want || store.get('musicOff', false)) return; start(false); },
     quiet(){ quit(); clearTimeout(wt); want = false; filmHold = false; if (ctl && (playing || mus.dataset.st === 'wait')){ ctl.pause(); setMus('off'); } }};
@@ -1185,7 +1200,7 @@ function holdEnd(){ if (!holdT) return; clearInterval(holdT); holdT = null; if (
 lb.addEventListener('pointerdown', holdStart); lb.addEventListener('contextmenu', e => e.preventDefault()); ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => lb.addEventListener(ev, holdEnd));
 lb.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat){ e.preventDefault(); liftoff(); } });
 const fv = $('#filmV');
-function playFilm(){ $('#crt').scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'center'}); const p = fv.play(); if (p && p.catch) p.catch(() => { fv.muted = true; const q = fv.play(); if (q && q.catch) q.catch(() => {}); toast('Film rolling. Tap the speaker on the player for sound.'); }); }
+function playFilm(){ if (window.mcOwnScroll) mcOwnScroll(2500); $('#crt').scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'center'}); const p = fv.play(); if (p && p.catch) p.catch(() => { fv.muted = true; const q = fv.play(); if (q && q.catch) q.catch(() => {}); toast('Film rolling. Tap the speaker on the player for sound.'); }); }
 $('#filmPlay').addEventListener('click', playFilm);
 fv.addEventListener('play', () => $('#crt').classList.add('on')); fv.addEventListener('pause', () => $('#crt').classList.remove('on')); fv.addEventListener('ended', () => { $('#crt').classList.remove('on'); fv.load(); });
 fv.addEventListener('error', () => { $('#film').hidden = true; if (window.ScrollTrigger) ScrollTrigger.refresh(); });
