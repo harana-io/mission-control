@@ -296,6 +296,7 @@ footer .sig{animation:neonBuzz 6.5s linear infinite}
 .btn.solid{box-shadow:0 0 18px color-mix(in srgb,var(--teal) 45%,transparent)}
 .ms.next{box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 60%,transparent),0 0 26px color-mix(in srgb,var(--gold) 28%,transparent)}
 :root[data-sky="daybreak"] section.deck h2{color:var(--ink);text-shadow:none}
+:root[data-sky="daybreak"] .rail .rk{filter:drop-shadow(0 0 1px #5B1FA8) drop-shadow(0 0 1px #5B1FA8) drop-shadow(0 0 6px var(--orange))}
 :root[data-sky="daybreak"] section.deck h2 em{color:var(--neon2);text-shadow:none}
 :root[data-sky="daybreak"] :is(.tag,.tm b,.card .name,.card .station,.wordmark,.panel>h3,.radio h3){text-shadow:none}
 :root[data-sky="daybreak"] .deck-head::after,:root[data-sky="daybreak"] .btn.solid{box-shadow:none}
@@ -323,15 +324,19 @@ footer .sig{animation:neonBuzz 6.5s linear infinite}
 .lcd-marq{white-space:nowrap;overflow:hidden;font-size:12px;letter-spacing:.14em;margin-top:6px;opacity:.9;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .lcd-marq span{display:inline-block;padding-left:100%;animation:marq 16s linear infinite}
 @keyframes marq{to{transform:translateX(-100%)}}
-.dial{position:relative;border-radius:12px;background:linear-gradient(180deg,#140a30,#0b0520);border:1px solid var(--line);overflow:hidden;min-height:74px}
+.dial{position:relative;border-radius:12px;background:linear-gradient(180deg,var(--dv-dial),var(--dv-screen));border:1px solid var(--line);overflow:hidden;min-height:74px}
 .dial-scale{position:absolute;left:10px;right:10px;top:14px;height:22px;background:repeating-linear-gradient(90deg,#ffd76a99 0 1px,transparent 1px 8px),repeating-linear-gradient(90deg,#ffd76a 0 2px,transparent 2px 40px);background-position:0 8px,0 0;background-repeat:repeat-x;opacity:.8}
 .dial-nums{position:absolute;left:10px;right:10px;bottom:8px;display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:10px;color:#ffd76aaa}
 .needle{position:absolute;top:8px;bottom:8px;width:2px;left:calc(10px + (100% - 20px) * var(--tune,.69));background:var(--pink);box-shadow:0 0 10px var(--pink);transition:left 1.2s cubic-bezier(.2,.9,.2,1)}
 .knobs{display:flex;gap:10px;align-items:center}
-.knob{width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#5a4a8a,#1a0f3c 70%);border:1px solid var(--line-2);box-shadow:0 6px 14px #0008,inset 0 2px 0 #ffffff22;position:relative;transform:rotate(var(--rot,0deg));transition:transform 1.2s cubic-bezier(.2,.9,.2,1)}
+.knob{width:54px;height:54px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--dv-knob1),var(--dv-knob2) 70%);border:1px solid var(--line-2);box-shadow:0 6px 14px #0008,inset 0 2px 0 #ffffff22;position:relative;transform:rotate(var(--rot,0deg));transition:transform 1.2s cubic-bezier(.2,.9,.2,1)}
 .knob::after{content:"";position:absolute;left:50%;top:6px;width:3px;height:14px;margin-left:-1.5px;border-radius:2px;background:var(--gold);box-shadow:0 0 8px var(--gold)}
 .radio-bezel{border-radius:18px;padding:8px;background:linear-gradient(145deg,#000a,#ffffff10);border:1px solid #0008;box-shadow:inset 0 2px 10px #000a}
-.radio-screen{position:relative;border-radius:12px;overflow:hidden;min-height:200px;background:#0b0520}
+/* the radio is a dark device in every sky, so its screen carries its own light ink and its body colours follow the theme */
+.radio{--dv-screen:#0b0520;--dv-dial:#140a30;--dv-a:#2a1866;--dv-b:#170b40;--dv-reel:#3a2580;--dv-knob1:#5a4a8a;--dv-knob2:#1a0f3c}
+:root[data-sky="midnight"] .radio{--dv-screen:#03121F;--dv-dial:#072439;--dv-a:#0E3A5C;--dv-b:#06213A;--dv-reel:#16466E;--dv-knob1:#3F7FA8;--dv-knob2:#06213A}
+.radio-screen{position:relative;border-radius:12px;overflow:hidden;min-height:200px;background:var(--dv-screen);--ink:#F6F0FF;--ink-2:#CFC4EC;--ink-3:#9C8FC4;color:var(--ink)}
+.radio-screen h3{color:var(--ink);text-shadow:0 0 12px color-mix(in srgb,var(--teal) 45%,transparent)}
 .sp-tray{height:0;overflow:hidden;transition:height .9s cubic-bezier(.2,.9,.2,1)}
 .radio-screen[data-state="live"] .sp-tray{height:364px}
 .sp-tray iframe{display:block;width:calc(100% - 24px);height:352px;margin:0 12px 12px;border:0;border-radius:12px}
@@ -339,9 +344,9 @@ footer .sig{animation:neonBuzz 6.5s linear infinite}
 .radio-screen::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:12px;box-shadow:inset 0 0 0 1px #ffffff14;background:linear-gradient(180deg,#ffffff0d,transparent 30%)}
 .offair{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:clamp(14px,3vw,28px);align-items:center;padding:clamp(16px,3vw,28px)}
 .offair h3{margin:0 0 6px}
-.cassette{width:min(260px,62vw);aspect-ratio:1.6;border-radius:14px;background:linear-gradient(180deg,#2a1866,#170b40);border:2px solid #ffd76a55;display:grid;grid-template-columns:1fr 1.3fr 1fr;align-items:center;padding:12px;box-shadow:0 10px 30px #0008;position:relative}
+.cassette{width:min(260px,62vw);aspect-ratio:1.6;border-radius:14px;background:linear-gradient(180deg,var(--dv-a),var(--dv-b));border:2px solid #ffd76a55;display:grid;grid-template-columns:1fr 1.3fr 1fr;align-items:center;padding:12px;box-shadow:0 10px 30px #0008;position:relative}
 .cassette::before{content:"";position:absolute;left:12px;right:12px;top:10px;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--pink),var(--orange),var(--gold),var(--teal))}
-.reel{aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#0b0520 0 28%,#ffd76a 29% 33%,#3a2580 34% 100%);border:2px solid #0b0520;position:relative;animation:spin 3.2s linear infinite}
+.reel{aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,var(--dv-screen) 0 28%,#ffd76a 29% 33%,var(--dv-reel) 34% 100%);border:2px solid var(--dv-screen);position:relative;animation:spin 3.2s linear infinite}
 .reel i{position:absolute;inset:38%;border-radius:50%;background:repeating-conic-gradient(#ffd76a 0 12deg,transparent 12deg 60deg)}
 .tape-label{text-align:center;font-family:var(--f-display);font-weight:800;font-size:13px;letter-spacing:.08em;color:#fff;line-height:1.15}
 .tape-label small{font-family:var(--f-script);font-weight:400;font-size:15px;color:var(--pink);letter-spacing:0}
