@@ -86,7 +86,7 @@ a{color:var(--teal)} button{font:inherit;color:inherit;cursor:pointer;border:0;b
 @media (min-width:880px){.hero-grid{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}}
 .eyebrow{font-family:var(--f-mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal)}
 .eyebrow .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--go);margin-right:8px;box-shadow:0 0 12px var(--go);animation:pulse 1.8s infinite}
-h1:focus{outline:none}
+h1:focus,h2:focus{outline:none}
 h1{font-family:var(--f-display);font-style:italic;font-weight:900;font-size:clamp(52px,min(10.5vw,11.5vh),124px);line-height:.88;margin:.18em 0 .12em;text-transform:uppercase;text-wrap:balance;letter-spacing:.005em}
 h1 .chrome{--chrome:linear-gradient(180deg,#fff 0%,#A9F3FF 24%,#2F7BE0 48%,#170A45 51%,#FF3D9A 56%,#FFA35C 80%,#FFF6CF 100%);background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 3px 0 #5A0E78) drop-shadow(0 0 22px color-mix(in srgb,var(--pink) 55%,transparent))}
@@ -782,7 +782,7 @@ html:has(#splash:not([hidden])){overflow:hidden}
     </div>
   </div>
   <div class="panel pack"><details class="fold solo"><summary><span>Pack list</span><span class="fc" data-fc="pack" data-w="stowed"></span></summary><div class="fold-body">
-      <p class="note" style="margin:0 0 10px"><span id="packN">0</span> of 8 stowed. Saved on this device only.</p>
+      <p class="note" style="margin:0 0 10px"><span id="packN" hidden>0</span>Saved on this device only.</p>
       <ul class="checks" data-list="pack">
         <li><label><input type="checkbox" id="pack-1"><span>Tux, shoes and everything in the bag</span></label></li>
         <li><label><input type="checkbox" id="pack-2"><span>Black dress socks and an undershirt</span></label></li>
@@ -983,10 +983,12 @@ $('#heroCal').innerHTML = calHTML(PLAN.find(m => m.launch).cal, 'calrow hero-cal
     const t = h2 ? [...h2.childNodes].filter(n => n.nodeName !== 'EM').map(n => n.textContent).join('').trim() : ''; return {n: m ? m[1] : '▶', t: t || tag, d: m ? m[2] : tag.replace(/^.*·\s*/, '')}; };
   nm.innerHTML = secs.map((sec, i) => { const L = label(sec); return `<a href="#${sec.id || 'top'}" data-i="${i}"><small>${esc(L.n)}</small><b>${esc(L.t)}</b><span>${esc(L.d)}</span></a>`; }).join('');
   const items = $$('a', nm), close = focus => { if (nm.hidden) return; nm.hidden = true; nb.setAttribute('aria-expanded', 'false'); if (focus) nb.focus({preventScroll: true}); };
-  function open(){ nm.hidden = false; nb.setAttribute('aria-expanded', 'true'); nm.style.top = Math.round($('.hud').getBoundingClientRect().bottom + 8) + 'px'; items.forEach((a, i) => a.setAttribute('aria-current', i === cur)); (items[cur] || items[0]).focus({preventScroll: true}); blip(); }
+  function open(){ nm.hidden = false; nb.setAttribute('aria-expanded', 'true'); const br = nb.getBoundingClientRect(); nm.style.top = Math.round($('.hud').getBoundingClientRect().bottom + 8) + 'px'; nm.style.right = Math.max(16, Math.round(innerWidth - br.right)) + 'px'; items.forEach((a, i) => a.setAttribute('aria-current', i === cur)); (items[cur] || items[0]).focus({preventScroll: true}); blip(); }
   nb.addEventListener('click', e => { e.stopPropagation(); nm.hidden ? open() : close(); });
   nm.addEventListener('click', e => { const a = e.target.closest('a'); if (!a) return; e.preventDefault(); const sec = secs[+a.dataset.i]; close(); if (!sec) return;
-    const y = sec.classList.contains('hero') ? 0 : sec.getBoundingClientRect().top + scrollY - $('.hud').getBoundingClientRect().height + 2; scrollTo({top: Math.max(0, y), behavior: reduce ? 'auto' : 'smooth'}); blip(); });
+    const box = sec.parentElement && sec.parentElement.classList.contains('pin-spacer') ? sec.parentElement : sec;
+    const y = sec.classList.contains('hero') ? 0 : box.getBoundingClientRect().top + scrollY - $('.hud').getBoundingClientRect().height + 2; scrollTo({top: Math.max(0, y), behavior: reduce ? 'auto' : 'smooth'});
+    const hd = $('h1, h2', sec); if (hd){ if (!hd.hasAttribute('tabindex')) hd.setAttribute('tabindex', '-1'); hd.focus({preventScroll: true}); } blip(); });
   document.addEventListener('click', e => { if (!nm.hidden && !e.target.closest('#navMenu, #navBtn')) close(); });
   document.addEventListener('keydown', e => { if (nm.hidden) return; const k = items.indexOf(document.activeElement);
     if (e.key === 'Escape'){ e.preventDefault(); close(true); } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp'){ e.preventDefault(); items[(k + (e.key === 'ArrowDown' ? 1 : items.length - 1)) % items.length].focus(); } else if (e.key === 'Tab') close(true); });
@@ -998,7 +1000,7 @@ const go = store.get('go', {});
 function renderCrew(){ $('#crewGrid').innerHTML = CREW.map(c => `<article class="card ${go[c.id] ? 'is-go' : ''}" data-id="${c.id}"><div class="station">${esc(c.station)}</div><div class="name">${esc(c.name)}</div><div class="role">${esc(c.role)}</div><p>${esc(c.duty)}</p><div class="known"><small>Known for</small><span>${esc(c.known)}</span></div>
   <button class="gobtn" aria-pressed="${!!go[c.id]}" data-go="${c.id}"><span class="led"></span><span>${go[c.id] ? esc(c.station) + ' is go' : 'Report go'}</span></button></article>`).join('');
   const n = CREW.filter(c => go[c.id]).length; $('#goN').textContent = n; $('.poll .bar').style.setProperty('--n', n); $('#allgo').hidden = n !== CREW.length; tilt($$('.card')); }
-$('#crewGrid').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (!b) return; const id = b.dataset.go; go[id] = !go[id]; store.set('go', go); renderCrew(); go[id] ? chirp() : blip();
+$('#crewGrid').addEventListener('click', e => { const b = e.target.closest('[data-go]'); if (!b) return; const id = b.dataset.go; go[id] = !go[id]; store.set('go', go); renderCrew(); const nb2 = $(`#crewGrid [data-go="${id}"]`); if (nb2) nb2.focus({preventScroll: true}); go[id] ? chirp() : blip();
   if (CREW.every(c => go[c.id])){ confetti(110); rumble(1.6); secret('allgo', 'All six stations report go.'); } });
 
 /* ---------- flight plan ---------- */
