@@ -958,7 +958,9 @@ const dayMs = 864e5, last = {};
 function setNum(id, v){ const el = $('#' + id); if (last[id] === v) return; last[id] = v; el.textContent = v; if (!reduce){ el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick'); } }
 function tickClock(){ let ms = LAUNCH - Date.now(); const up = ms < 0; ms = Math.abs(ms); const d = Math.floor(ms / dayMs), h = Math.floor(ms / 36e5) % 24, m = Math.floor(ms / 6e4) % 60, s = Math.floor(ms / 1e3) % 60;
   setNum('cd', d); setNum('ch', pad(h)); setNum('cm', pad(m)); setNum('cs', pad(s)); $('#hudT').textContent = (up ? '+' : '-') + pad(d) + ':' + pad(h) + ':' + pad(m) + ':' + pad(s); }
-tickClock(); setInterval(tickClock, 1000);
+/* tick just after each real second, so the display never drifts, skips or doubles a second; catch up at once when the phone wakes */
+let clockT; (function beat(){ tickClock(); clearTimeout(clockT); clockT = setTimeout(beat, 1000 - (Date.now() % 1000) + 12); })();
+document.addEventListener('visibilitychange', () => { if (!document.hidden){ tickClock(); clearTimeout(clockT); clockT = setTimeout(function beat(){ tickClock(); clockT = setTimeout(beat, 1000 - (Date.now() % 1000) + 12); }, 1000 - (Date.now() % 1000) + 12); } });
 function daysTo(iso){ const t = new Date(iso + 'T23:59:59-06:00'), n = Math.ceil((t - Date.now()) / dayMs) - 1; return n; }
 function tmLabel(iso){ const n = daysTo(iso); return n > 1 ? 'T-' + n + ' days' : n === 1 ? 'Tomorrow' : n === 0 ? 'Today' : 'Complete'; }
 $$('[data-tm]').forEach(el => { el.textContent = tmLabel(el.dataset.tm); });
