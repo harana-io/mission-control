@@ -52,13 +52,14 @@ a{color:var(--teal)} button{font:inherit;color:inherit;cursor:pointer;border:0;b
 .hero::before{content:"";position:absolute;inset:0;z-index:-3;background:linear-gradient(180deg,transparent 0%,var(--sky-b) 22%,var(--sky-c) 52%,var(--sky-d) 74%,var(--sky-e) 86%)}
 .sky-space{background:radial-gradient(120% 80% at 70% 10%,var(--bg-2),var(--bg) 70%);z-index:-4}
 .sky-dawn{background:linear-gradient(0deg,var(--sky-d) 0%,var(--sky-c) 22%,transparent 62%);opacity:calc((var(--p,0) - .86) * 6)}
-#stars{position:fixed;inset:0;z-index:-2;width:100%;height:100%;pointer-events:none}
+#stars{position:fixed;left:0;top:0;z-index:-2;width:100%;height:100vh;height:100lvh;pointer-events:none}
 .grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.07;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 /* ---------- flight console (sticky HUD) ---------- */
 .hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   background:color-mix(in srgb,var(--bg) 72%,transparent);border-bottom:1px solid var(--line)}
+@media (hover:none){.grain{display:none}.hud{backdrop-filter:none;-webkit-backdrop-filter:none;background:color-mix(in srgb,var(--bg) 95%,transparent)}}
 .hud-in{display:flex;align-items:center;gap:12px;min-height:54px;flex-wrap:wrap;padding-block:6px}
 .wordmark{font-family:var(--f-display);font-weight:800;letter-spacing:.2em;font-size:17px;white-space:nowrap;padding:6px 0;min-height:40px}
 .replay{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);padding:10px 14px;min-height:40px;text-decoration:underline;text-underline-offset:4px}
@@ -119,7 +120,7 @@ h1 .script{display:block;font-family:var(--f-script);font-style:normal;font-weig
 .launch .lb-t{font-variant-numeric:tabular-nums}
 @keyframes jit{25%{translate:.6px -.5px}75%{translate:-.6px .4px}}
 .hint{font-family:var(--f-mono);font-size:12.5px;color:var(--ink);opacity:.85}
-.patch-wrap{position:relative;justify-self:center;width:min(100%,460px,62vh);aspect-ratio:1;perspective:900px}
+.patch-wrap{position:relative;justify-self:center;width:min(100%,460px,62vh);aspect-ratio:1;perspective:900px;translate:0 var(--py,0px)}
 @media (max-width:879px){.patch-wrap{margin-top:clamp(26px,7vw,44px)}}
 .patch{width:100%;height:100%;border-radius:50%;display:block;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease-out;
   box-shadow:0 30px 80px #0009,0 0 70px color-mix(in srgb,var(--pink) 40%,transparent);animation:float 7s ease-in-out infinite;cursor:pointer}
@@ -1177,7 +1178,7 @@ renderCrew(); tilt([$('#patch')]);
 
 /* ---------- starfield: parallax on scroll, a comet behind the cursor, warp on demand ---------- */
 const cv = $('#stars'), cx = cv.getContext('2d'); let W = 0, H = 0, stars = [], warp = 0, mouse = null, trail = [], scrollY0 = 0;
-function size(){ const dpr = Math.min(devicePixelRatio || 1, 2); W = cv.width = innerWidth * dpr; H = cv.height = innerHeight * dpr; const n = Math.round(Math.min(260, innerWidth * innerHeight / 5200)); stars = Array.from({length: n}, () => ({x: Math.random() * W, y: Math.random() * H, z: .2 + Math.random() * .8, tw: Math.random() * 6.28})); }
+let sizedW = 0; function size(){ const dpr = Math.min(devicePixelRatio || 1, 2), h = Math.max(innerHeight, cv.clientHeight || 0); if (innerWidth === sizedW && h * dpr <= H + 1) return; sizedW = innerWidth; W = cv.width = innerWidth * dpr; H = cv.height = h * dpr; const n = Math.round(Math.min(260, innerWidth * innerHeight / 5200)); stars = Array.from({length: n}, () => ({x: Math.random() * W, y: Math.random() * H, z: .2 + Math.random() * .8, tw: Math.random() * 6.28})); }
 size(); addEventListener('resize', size);
 let lastDraw = 0, lastMove = -1e9;
 addEventListener('pointermove', e => { if (e.pointerType === 'mouse'){ mouse = {x: e.clientX, y: e.clientY}; lastMove = performance.now(); } });
@@ -1211,7 +1212,7 @@ function splitWords(el){ [...el.childNodes].forEach(n => { if (n.nodeType !== 3 
 if (window.gsap && window.ScrollTrigger && !reduce){ gsap.registerPlugin(ScrollTrigger);
   const chrome = $('.hero h1 .chrome'); splitWords(chrome); chrome.classList.add('split');
   /* the patch assembles: an exploded stack drops in layer by layer, then closes flat */
-  ScrollTrigger.config({ignoreMobileResize: true});
+  ScrollTrigger.config({ignoreMobileResize: true, autoRefreshEvents: 'visibilitychange,DOMContentLoaded'});
   root.classList.add('anat-live');
   const L = $$('.anat-stage .ly'), items = $$('.anat-list li'); let cur = 0;
   const narrow = innerWidth < 900;
@@ -1235,13 +1236,18 @@ if (window.gsap && window.ScrollTrigger && !reduce){ gsap.registerPlugin(ScrollT
     gsap.from($$('h2 .w', d), {scrollTrigger: st, yPercent: 80, opacity: 0, rotate: 4, stagger: .07, duration: .7, ease: 'power4.out'});
     gsap.from($$('h2 em', d), {scrollTrigger: st, scale: .4, opacity: 0, rotate: -12, duration: .8, delay: .25, ease: 'back.out(2.4)'});
     const els = $$('.panel, .card, .ms, .radio, .crt', d); if (els.length) gsap.from(els, {scrollTrigger: {trigger: d, start: 'top 72%', once: true}, y: 46, opacity: 0, stagger: .06, duration: .65, ease: 'power3.out', clearProps: 'transform,opacity'}); });
-  gsap.to('.patch', {scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true}, y: 60});
+  gsap.to('#patchWrap', {scrollTrigger: {trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true}, '--py': '60px', ease: 'none'});
   gsap.from('#sig', {scrollTrigger: {trigger: 'footer', start: 'top 90%', once: true}, scale: .7, opacity: 0, rotate: -6, duration: .9, ease: 'elastic.out(1,.5)'});
-  addEventListener('load', () => ScrollTrigger.refresh());
-  /* keep the pin honest when the page grows after load (fonts, the player tray, a rotated phone) */
-  let rT, lastH = document.documentElement.scrollHeight;
-  const reflow = () => { clearTimeout(rT); rT = setTimeout(() => { if (Math.abs(document.documentElement.scrollHeight - lastH) > 8){ ScrollTrigger.refresh(); lastH = document.documentElement.scrollHeight; } }, 300); };
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { ScrollTrigger.refresh(); lastH = document.documentElement.scrollHeight; });
+  /* keep the pin honest when the page grows after load (fonts, the player tray, a rotated phone), but never mid-scroll:
+     a refresh while a finger or a fling is moving the page stops the scroll dead on a phone */
+  let rT, srT, lastH = document.documentElement.scrollHeight, movedAt = 0, rw = innerWidth;
+  const moved = () => { movedAt = performance.now(); };
+  ['scroll', 'touchstart', 'touchmove', 'wheel'].forEach(n => addEventListener(n, moved, {passive: true}));
+  const safeRefresh = () => { clearTimeout(srT); const wait = 500 - (performance.now() - movedAt); if (wait > 0){ srT = setTimeout(safeRefresh, wait + 40); return; } ScrollTrigger.refresh(); lastH = document.documentElement.scrollHeight; };
+  const reflow = () => { clearTimeout(rT); rT = setTimeout(() => { if (Math.abs(document.documentElement.scrollHeight - lastH) > 8) safeRefresh(); }, 300); };
+  addEventListener('load', reflow);
+  addEventListener('resize', () => { if (innerWidth !== rw){ rw = innerWidth; safeRefresh(); } });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(safeRefresh);
   if ('ResizeObserver' in window) new ResizeObserver(reflow).observe(document.body); }
 
 /* ---------- hold to launch ---------- */
