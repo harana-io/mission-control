@@ -1,0 +1,19 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Mission Control//Earl and Hailey//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:2026-11-28-tux-group-fitting-mission-control@mission-con
+ trol
+DTSTAMP:20261125T034827Z
+SEQUENCE:1
+DTSTART;VALUE=DATE:20261128
+DTEND;VALUE=DATE:20261129
+SUMMARY:Tux group fitting (Mission Control)
+LOCATION:Men’s Wearhouse\, 19222 Gulf Fwy\, Friendswood\, TX
+  77546
+DESCRIPTION:Wedding group 13804117. Any Men’s Wearhouse work
+ s through Dec 2.
+END:VEVENT
+END:VCALENDAR

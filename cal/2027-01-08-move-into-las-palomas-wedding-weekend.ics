@@ -1,0 +1,18 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Mission Control//Earl and Hailey//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:2027-01-08-move-into-las-palomas-wedding-weekend@mission
+ -control
+DTSTAMP:20261125T034827Z
+SEQUENCE:1
+DTSTART:20270108T220000Z
+DTEND:20270109T000000Z
+SUMMARY:Move into Las Palomas (wedding weekend)
+LOCATION:11820 Stewart Rd\, Galveston\, TX 77554
+DESCRIPTION:Check-in from 4 PM. Parking for 8 cars\, never o
+ n the lawn.
+END:VEVENT
+END:VCALENDAR

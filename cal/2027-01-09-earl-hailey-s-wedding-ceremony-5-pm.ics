@@ -1,0 +1,19 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Mission Control//Earl and Hailey//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:2027-01-09-earl-hailey-s-wedding-ceremony-5-pm@mission-c
+ ontrol
+DTSTAMP:20261125T034827Z
+SEQUENCE:1
+DTSTART:20270109T230000Z
+DTEND:20270110T030000Z
+SUMMARY:Earl & Hailey’s wedding (ceremony 5 PM)
+LOCATION:Bayside Event Center\, 1723 61st St\, Galveston\, T
+ X 77551
+DESCRIPTION:Ceremony at 5:00 PM. Groomsmen report earlier\; 
+ Earl will confirm the time.
+END:VEVENT
+END:VCALENDAR
